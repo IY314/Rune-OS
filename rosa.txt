@@ -1,0 +1,27 @@
+DIRECTORY:
+
+Rune OS Alpha
+    apps
+        account
+            __init__.py
+        calc
+            __init__.py
+        homepage
+            __init__.py
+        utils
+            __init__.py
+        <app_name>
+            __init__.py
+            <other required files>
+    main.py
+    README.md
+    rosa.txt
+
+IN <app_name>/__init__.py:
+
+<imports, constants, code>
+
+def launch():
+    <code to be executed on launch>
+
+<more code>
