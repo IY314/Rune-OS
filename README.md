@@ -8,7 +8,7 @@ Firstly, download and install the ENTIRE folder. The OS will not work otherwise.
 
 Second, run `main.py`. You will create an account with a username and a password.
 
-You are now ready to experience the capabilities of RUNE OS TEST!
+You are now ready to experience the capabilities of RUNE OS ALPHA!
 
 NOTE: As this OS is still in the development stage, don't be surprised if errors jump out at you. Let me know about the error, and we will do our best to fix it.
 ## Abilities
