@@ -26,4 +26,4 @@ def launch():
 
 <more code>
 
-An example can be found in the GTN app.
+An example can be found in the example app.
