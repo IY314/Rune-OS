@@ -6,9 +6,15 @@ from apps import homepage
 selected_account = None
 
 DEBUG = True
+DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
 
-with open("info.json") as f:
-    json_data = json.loads(f.read())
+try:
+    with open("info.json") as f:
+        json_data = json.loads(f.read())
+except FileNotFoundError:
+    with open("info.json", "w+") as f:
+        f.write(json.dumps(DEFAULT_JSON_DATA))
+        json_data = DEFAULT_JSON_DATA
 
 del f
 
