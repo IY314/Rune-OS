@@ -86,7 +86,7 @@ def login():
             new_account = Account()
             utils.dummy(new_account)
         elif account_choice == "2":
-            if json_data["ACCOUNTS"] == []:
+            if json_data["ACCOUNTS"] != []:
                 return match_account()
             else:
                 exit()
@@ -107,16 +107,17 @@ def login():
 
 def match_account():
     global selected_account
-    while True:
-        existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
+    existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
+    for a in json_data["ACCOUNTS"]:
         if existing_choice == "":
             return login()
-        for a in json_data["ACCOUNTS"]:
-            if existing_choice == a["username"]:
-                selected_account = a
-                return match_password()
+        if existing_choice == a["username"]:
+            selected_account = a
+            break
+    else:
         print("Invalid account.")
-        continue
+        return match_account()
+    return match_password()
 
 
 def match_password():
@@ -126,7 +127,7 @@ def match_password():
         if password_choice == "":
             return match_account()
         elif password_choice != selected_account["password"]:
-            print("Incorrect password.\nPassword: ")
+            print("Incorrect password.")
             continue
         else:
             json_data["CURRENT"] = selected_account

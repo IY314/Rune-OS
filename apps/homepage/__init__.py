@@ -40,7 +40,7 @@ def home():
     global json_data
     options = "Enter 1 to run an app."
     if json_data["CURRENT"]["has_admin"]:
-        options += "\nEnter 2 to clear all accounts."
+        options += "\nEnter 2 to clear all accounts\nEnter 3 to view someone's password."
     options += "\nEnter anything else to logout."
     print(options)
     action = input(">")
@@ -53,6 +53,20 @@ def home():
             save()
             from apps import account
             account.login()
+    elif action == "3" and json_data["CURRENT"]["has_admin"]:
+        account_choice = input("Account Username: ")
+        for a in json_data["ACCOUNTS"]:
+            if a["username"] == account_choice:
+                password_check = input("Admin Password: ")
+                if password_check == json_data["CURRENT"]["password"]:
+                    print(a["password"])
+                else:
+                    print("Incorrect password, access denied.")
+                break
+        else:
+            print("Invalid account.")
+        home()
+                
     else:
         json_data["CURRENT"] = None
         save()
