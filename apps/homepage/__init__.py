@@ -79,13 +79,13 @@ def run_app():
         app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
         if app == "help":
             for a in os.listdir("apps"):
-                if a in ("__pycache__", "__init__.py", "homepage", "utils"):
+                if a in ("__pycache__", "__init__.py", "homepage", "utils", "account"):
                     continue
                 else:
                     print(a)
             return home()
         for a in os.listdir("apps"):
-            if a in ("__pycache__", "__init__.py", "homepage", "utils"):
+            if a in ("__pycache__", "__init__.py", "homepage", "utils", "account"):
                 continue
             else:
                 if app == a:
