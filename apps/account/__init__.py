@@ -48,12 +48,11 @@ class Account:
                 raise TypeError("Expected a value for username, password, and has_admin.")
         else:
             self.get_info()
-        self.accounts.append({
+        json_data["ACCOUNTS"].append({
             "username": self.username,
             "password": self.password,
             "has_admin": self.has_admin
         })
-        json_data["ACCOUNTS"] = self.accounts
         save()
     
     def __repr__(self):
