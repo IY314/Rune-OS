@@ -80,7 +80,10 @@ def login():
             new_account = Account()
             utils.dummy(new_account)
         elif account_choice == "2":
-            return match_account()
+            if json_data["ACCOUNTS"] == []:
+                return match_account()
+            else:
+                exit()
         elif account_choice == "ENTER_TEST_MODE":
             test_account = Account(username="test-1", password="1234", has_admin=True)
             utils.dummy(test_account)
