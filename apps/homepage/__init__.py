@@ -53,22 +53,6 @@ def home():
             save()
             from apps import account
             account.login()
-        """
-    elif action == "3" and json_data["CURRENT"]["has_admin"]:
-        account_choice = input("Account Username: ")
-        for a in json_data["ACCOUNTS"]:
-            if a["username"] == account_choice:
-                password_check = input("Admin Password: ")
-                hashed = hashlib.sha256(password_check.encode("utf-8")).hexdigest()
-                if hashed == json_data["CURRENT"]["password"]:
-                    print(a["password"])
-                else:
-                    print("Incorrect password, access denied.")
-                break
-        else:
-            print("Invalid account.")
-        home()
-        """
     else:
         json_data["CURRENT"] = None
         save()
