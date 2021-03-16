@@ -1,5 +1,11 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.3
+### Rune OS ALPHA 3.3.3
+Adds a "delete account" option
+
+- Added an `update` function to the `account` app to get new information
+- Added a "delete account" option to `homepage`
+
 ### Rune OS ALPHA 3.3.2
 Basically just a cleanup version, removes all unnecessary code.
 

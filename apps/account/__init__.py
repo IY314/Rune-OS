@@ -4,19 +4,26 @@ from apps import utils
 from apps import homepage
 
 selected_account = None
+json_data = {}
 
 DEBUG = True
 DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
 
-try:
-    with open("info.json") as f:
-        json_data = json.loads(f.read())
-except FileNotFoundError:
-    with open("info.json", "w+") as f:
-        f.write(json.dumps(DEFAULT_JSON_DATA))
-        json_data = DEFAULT_JSON_DATA
 
-del f
+def update():
+    global json_data
+    try:
+        with open("info.json") as f:
+            json_data = json.loads(f.read())
+    except FileNotFoundError:
+        with open("info.json", "w+") as f:
+            f.write(json.dumps(DEFAULT_JSON_DATA))
+            json_data = DEFAULT_JSON_DATA
+
+    del f
+
+
+update()
 
 
 def save():
@@ -89,6 +96,7 @@ def login():
             new_account = Account()
             utils.dummy(new_account)
             json_data["CURRENT"] = new_account.dict
+            save()
             homepage.launch()
         elif account_choice == "2":
             if json_data["ACCOUNTS"] != []:

@@ -1,4 +1,4 @@
-import json, time, os, sys # , hashlib
+import json, time, os, sys, hashlib
 sys.path.append("../")
 import apps
 from apps import utils
@@ -38,17 +38,30 @@ def launch():
 
 def home():
     global json_data
-    options = "Enter 1 to run an app."
+    options = "Enter 1 to run an app.\nEnter 2 to delete your account."
     if json_data["CURRENT"]["has_admin"]:
-        options += "\nEnter 2 to clear all accounts."
+        options += "\nEnter 3 to clear all accounts."
     options += "\nEnter anything else to logout."
     print(options)
     action = input(">")
     if action == "1":
         run_app()
-    elif action == "2" and json_data["CURRENT"]["has_admin"]:
-        confirmation = utils.y_n("This will clear all accounts, including yours. Are you sure?")
-        if confirmation:
+    elif action == "2":
+        confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
+        if confirmation == json_data["CURRENT"]["password"]:
+            for i in range(len(json_data["ACCOUNTS"])):
+                if json_data["ACCOUNTS"][i] == json_data["CURRENT"]:
+                    del json_data["ACCOUNTS"][i]
+                    save()
+                    break
+            json_data["CURRENT"] = None
+            save()
+            from apps import account
+            account.update()
+            account.login()
+    elif action == "3" and json_data["CURRENT"]["has_admin"]:
+        confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
+        if confirmation == json_data["CURRENT"]["password"]:
             json_data = {"CURRENT": None, "ACCOUNTS": []}
             save()
             from apps import account
