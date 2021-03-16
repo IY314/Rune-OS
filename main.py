@@ -1,5 +1,10 @@
-from apps import account
+from apps import account, dev_info
 
-print("RUNE OS ALPHA 0.2.1")
-print("Booting up...")
-account.login()
+def launch(dev=False):
+    dev_info.print()
+    print("Booting up...")
+    account.login(dev)
+
+
+if __name__ == "__main__":
+    launch()
