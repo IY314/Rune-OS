@@ -25,3 +25,5 @@ def launch():
     <code to be executed on launch>
 
 <more code>
+
+An example can be found in the example app.

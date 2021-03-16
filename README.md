@@ -10,11 +10,11 @@ Second, run `main.py`. You will create an account with a username and a password
 
 You are now ready to experience the capabilities of RUNE OS ALPHA!
 
-NOTE: As this OS is still in the development stage, don't be surprised if errors jump out at you. Let me know about the error, and we will do our best to fix it.
+NOTE: As this OS is still in the development stage, don't be surprised if errors jump out at you. Let us know about the error, and we will do our best to fix it.
 ## Abilities
 This OS can:
 * manage accounts with passwords
 * support apps (packages)*
 * and much more!
 
-*Apps are ONLY supported in `ROSA`(RUNE OS ALPHA) format (see `rosa.txt`)
+*Apps are ONLY supported in `ROSA` (RUNE OS ALPHA) format (see `rosa.txt`)

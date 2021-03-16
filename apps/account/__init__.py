@@ -6,9 +6,15 @@ from apps import homepage
 selected_account = None
 
 DEBUG = True
+DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
 
-with open("info.json") as f:
-    json_data = json.loads(f.read())
+try:
+    with open("info.json") as f:
+        json_data = json.loads(f.read())
+except FileNotFoundError:
+    with open("info.json", "w+") as f:
+        f.write(json.dumps(DEFAULT_JSON_DATA))
+        json_data = DEFAULT_JSON_DATA
 
 del f
 
@@ -42,12 +48,12 @@ class Account:
                 raise TypeError("Expected a value for username, password, and has_admin.")
         else:
             self.get_info()
-        self.accounts.append({
+        self.dict = {
             "username": self.username,
             "password": self.password,
             "has_admin": self.has_admin
-        })
-        json_data["ACCOUNTS"] = self.accounts
+        }
+        json_data["ACCOUNTS"].append(self.dict)
         save()
     
     def __repr__(self):
@@ -57,12 +63,20 @@ class Account:
         """
 
     def get_info(self):
-        self.username  = utils.ask("Enter a username.")
+        while True:
+            possible_username = utils.ask("Enter a username.")
+            for user in json_data["ACCOUNTS"]:
+                if possible_username == user["username"]:
+                    print("That username is taken.")
+                    break
+            else:
+                self.username = possible_username
+                break
         self.password  = utils.ask("Enter a secure password.", confirm=2, confirm_response="Type it again.", min_letters=8)
         self.has_admin = False
     
 
-def login():
+def login(dev=False):
     global selected_account
     while True:
         prompt1 = "Enter 1 to create a new account."
@@ -79,16 +93,25 @@ def login():
         if account_choice == "1":
             new_account = Account()
             utils.dummy(new_account)
+            json_data["CURRENT"] = new_account.dict
+            homepage.launch()
         elif account_choice == "2":
-            return match_account()
+            if json_data["ACCOUNTS"] != []:
+                return match_account()
+            else:
+                exit()
+        elif account_choice == "3" and dev:
+            test_account = Account(username="test-1", password="1234", has_admin=True)
+            print("Almost deprecated feature, use `ENTER_TEST_MODE` instead in the future.")
+            utils.dummy(test_account)
+            selected_account = test_account.dict
+            json_data["CURRENT"] = selected_account
+            save()
+            return homepage.launch()
         elif account_choice == "ENTER_TEST_MODE":
             test_account = Account(username="test-1", password="1234", has_admin=True)
             utils.dummy(test_account)
-            selected_account = {
-                "username": "test-1",
-                "password": "1234",
-                "has_admin": True
-            }
+            selected_account = test_account.dict
             json_data["CURRENT"] = selected_account
             save()
             return homepage.launch()
@@ -98,16 +121,17 @@ def login():
 
 def match_account():
     global selected_account
-    while True:
-        existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
+    existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
+    for a in json_data["ACCOUNTS"]:
         if existing_choice == "":
             return login()
-        for a in json_data["ACCOUNTS"]:
-            if existing_choice == a["username"]:
-                selected_account = a
-                return match_password()
+        if existing_choice == a["username"]:
+            selected_account = a
+            break
+    else:
         print("Invalid account.")
-        continue
+        return match_account()
+    return match_password()
 
 
 def match_password():
@@ -117,7 +141,7 @@ def match_password():
         if password_choice == "":
             return match_account()
         elif password_choice != selected_account["password"]:
-            print("Incorrect password.\nPassword: ")
+            print("Incorrect password.")
             continue
         else:
             json_data["CURRENT"] = selected_account
