@@ -13,6 +13,9 @@ Rune OS Alpha
         <app_name>
             __init__.py
             <other required files>
+    .gitattributes
+    .gitignore
+    changelog.md
     main.py
     README.md
     rosa.txt
