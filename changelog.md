@@ -4,8 +4,12 @@
 Moved system "apps" to a new directory called `system`.
 
 - Added new directory/package `system`
-- Moved `account`, `homepage`, and `utils` into `system`
+- Moved `account`, `homepage`, `utils`, and `info.json` into `system`
 - Removed obsolete checks for "homepage" and "account" in `homepage`
+- Added new `settings` module
+- Removed duplicate `account` module in `utils` (no idea why it was there)
+- Renamed `changelog.md` into `CHANGELOG.md`
+- Retitled the bootup text from "RUNE OS ALPHA 3.3" to "RUNE OS ALPHA 3.4"
 
 ## Rune OS ALPHA 3.3
 ### Rune OS ALPHA 3.3.3

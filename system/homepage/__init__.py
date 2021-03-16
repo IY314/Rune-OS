@@ -8,14 +8,14 @@ json_data = {}
 
 def update():
     global json_data
-    with open("info.json") as f:
+    with open("system/info.json") as f:
         json_data = json.loads(f.read())
 
     del f
 
 
 def save():
-    with open("info.json", "w") as f:
+    with open("system/info.json", "w") as f:
         f.write(json.dumps(json_data))
 
 
