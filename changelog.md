@@ -1,7 +1,15 @@
 # Rune OS ALPHA (3)
+## Rune OS ALPHA 3.4
+### Rune OS ALPHA 3.4
+Moved system "apps" to a new directory called `system`.
+
+- Added new directory/package `system`
+- Moved `account`, `homepage`, and `utils` into `system`
+- Removed obsolete checks for "homepage" and "account" in `homepage`
+
 ## Rune OS ALPHA 3.3
 ### Rune OS ALPHA 3.3.3
-Adds a "delete account" option
+Adds a "delete account" option.
 
 - Added an `update` function to the `account` app to get new information
 - Added a "delete account" option to `homepage`

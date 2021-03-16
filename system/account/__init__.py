@@ -1,7 +1,6 @@
 import json, sys, hashlib
 sys.path.append("../")
-from apps import utils
-from apps import homepage
+from system import homepage, utils
 
 selected_account = None
 json_data = {}

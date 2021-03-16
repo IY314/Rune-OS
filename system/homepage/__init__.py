@@ -1,7 +1,7 @@
 import json, time, os, sys, hashlib
 sys.path.append("../")
 import apps
-from apps import utils
+from system import utils
 
 json_data = {}
 
@@ -56,7 +56,7 @@ def home():
                     break
             json_data["CURRENT"] = None
             save()
-            from apps import account
+            from system import account
             account.update()
             account.login()
     elif action == "3" and json_data["CURRENT"]["has_admin"]:
@@ -64,12 +64,12 @@ def home():
         if confirmation == json_data["CURRENT"]["password"]:
             json_data = {"CURRENT": None, "ACCOUNTS": []}
             save()
-            from apps import account
+            from system import account
             account.login()
     else:
         json_data["CURRENT"] = None
         save()
-        from apps import account
+        from system import account
         account.login()
 
 
@@ -78,13 +78,13 @@ def run_app():
         app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
         if app == "help":
             for a in os.listdir("apps"):
-                if a in ("__pycache__", "__init__.py", "homepage", "utils", "account"):
+                if a in ("__pycache__", "__init__.py"):
                     continue
                 else:
                     print(a)
             return home()
         for a in os.listdir("apps"):
-            if a in ("__pycache__", "__init__.py", "homepage", "utils", "account"):
+            if a in ("__pycache__", "__init__.py"):
                 continue
             else:
                 if app == a:

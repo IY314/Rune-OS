@@ -1,4 +1,4 @@
-from apps import account
+from system import account
 
 print("RUNE OS ALPHA 3.3")
 print("Booting up...")
