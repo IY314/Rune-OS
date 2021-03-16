@@ -1,3 +1,10 @@
+## Rune OS ALPHA 3.3
+- Removed the soon-deprecated warning
+- Removed `dev_main.py` and the `launch` function in `main.py`
+- Added password hashing by use of the `hashlib` module
+- Temporarily removed the admin action of viewing someone's password
+- 
+
 ## Rune OS ALPHA 3.2.3
 - Added a soon-deprecated warning for people (like me) who type "3" at the first prompt to create a test account
 - Updated the `example` app to support multiple runs

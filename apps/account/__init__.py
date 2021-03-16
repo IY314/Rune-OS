@@ -1,4 +1,4 @@
-import json, sys
+import json, sys, hashlib
 sys.path.append("../")
 from apps import utils
 from apps import homepage
@@ -72,11 +72,12 @@ class Account:
             else:
                 self.username = possible_username
                 break
-        self.password  = utils.ask("Enter a secure password.", confirm=2, confirm_response="Type it again.", min_letters=8)
+        self.password = hashlib.sha256(utils.ask("Enter a secure password.", confirm=2,
+            confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
         self.has_admin = False
     
 
-def login(dev=False):
+def login():
     global selected_account
     while True:
         prompt1 = "Enter 1 to create a new account."
@@ -100,16 +101,9 @@ def login(dev=False):
                 return match_account()
             else:
                 exit()
-        elif account_choice == "3" and dev:
-            test_account = Account(username="test-1", password="1234", has_admin=True)
-            print("Almost deprecated feature, use `ENTER_TEST_MODE` instead in the future.")
-            utils.dummy(test_account)
-            selected_account = test_account.dict
-            json_data["CURRENT"] = selected_account
-            save()
-            return homepage.launch()
         elif account_choice == "ENTER_TEST_MODE":
-            test_account = Account(username="test-1", password="1234", has_admin=True)
+            encrypted_pass = hashlib.sha256(b"1234").hexdigest()
+            test_account = Account(username="test-1", password=encrypted_pass, has_admin=True)
             utils.dummy(test_account)
             selected_account = test_account.dict
             json_data["CURRENT"] = selected_account
@@ -138,9 +132,10 @@ def match_password():
     global selected_account
     while True:
         password_choice = input("Password: ")
+        hashed = hashlib.sha256(password_choice.encode("utf-8")).hexdigest()
         if password_choice == "":
             return match_account()
-        elif password_choice != selected_account["password"]:
+        elif hashed != selected_account["password"]:
             print("Incorrect password.")
             continue
         else:
