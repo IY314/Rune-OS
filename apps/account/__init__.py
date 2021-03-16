@@ -55,12 +55,6 @@ class Account:
         }
         json_data["ACCOUNTS"].append(self.dict)
         save()
-    
-    def __repr__(self):
-        return f"""
-        USERNAME: {self.username}
-        PASSWORD: {utils.conceal(self.password)}
-        """
 
     def get_info(self):
         while True:
@@ -142,7 +136,3 @@ def match_password():
             json_data["CURRENT"] = selected_account
             save()
             return homepage.launch()
-
-
-if __name__ == "__main__":
-    login()

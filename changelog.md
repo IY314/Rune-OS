@@ -1,5 +1,12 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.3
+### Rune OS ALPHA 3.3.2
+Basically just a cleanup version, removes all unnecessary code.
+
+- Removed the obsolete `__repr__` method from the `Account` class
+- Removed the `if __name__ == "__main__"` if-else clauses from every app (the clauses do not actually function)
+- Added a description part to the changelog
+
 ### Rune OS ALPHA 3.3.1
 - Permanently removed the admin action of viewing someone's password
 - Updated `README.md` to be less like the RUNE OS TEST `README.md`

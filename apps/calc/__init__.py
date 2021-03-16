@@ -84,9 +84,3 @@ class CalcParser(Parser):
     @_("\"(\" expr \")\"")
     def factor(self, p):
         return p.expr
-    
-    
-
-
-if __name__ == "__main__":
-    launch()

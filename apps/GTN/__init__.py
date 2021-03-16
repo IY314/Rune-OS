@@ -46,7 +46,3 @@ def home():
     else:
         from apps import homepage
         homepage.launch()
-
-
-if __name__ == "__main__":
-    launch()
