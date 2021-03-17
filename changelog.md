@@ -9,6 +9,7 @@ Custom apps!
 - Removed support for public apps (might add later)
 - Added new action "install app"
 - Added "incorrect password" messages to actions that needed them
+- Added `user` to .gitignore (not deleted though)
 
 ## Rune OS ALPHA 3.4
 ### Rune OS ALPHA 3.4.1
