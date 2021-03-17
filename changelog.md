@@ -1,5 +1,11 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.5
+### Rune OS ALPHA 3.5.2
+Nothing much
+
+- Deleted obsolete `settings` module
+- Added a function `tprint` to `utils`, functions like `print` but with realistic typing animation
+
 ### Rune OS ALPHA 3.5.1
 Public apps re-added!
 

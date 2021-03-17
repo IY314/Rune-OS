@@ -28,6 +28,7 @@ update()
 def save():
     with open("system/info.json", "w") as f:
         f.write(json.dumps(json_data))
+    del f
 
 
 class Account:
