@@ -16,5 +16,9 @@ def update():
 
 def run(app_name):
     update()
-    app = importlib.import_module(f"apps.user.{json_data['CURRENT']['username']}.{app_name}")
-    app.launch()
+    try:
+        app = importlib.import_module(f"apps.user.{json_data['CURRENT']['username']}.{app_name}")
+        app.launch()
+    except ModuleNotFoundError:
+        app = importlib.import_module(f"apps.{app_name}")
+        app.launch()

@@ -1,3 +1,5 @@
+import os
+
 ALL = None
 
 
@@ -11,6 +13,7 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, e
         if not confirm_response:
             raise TypeError("Argument confirm is True, but there is no value set for confirm_response!")
     while True:
+        clear_console()
         ans = input(question + "\n>")
         if accepted_responses:
             if ans not in accepted_responses:
@@ -34,6 +37,7 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, e
 
 def y_n(message, error_message="Invalid answer."):
     while True:
+        clear_console()
         ans = input(message + "\n>")
         if ans.lower() in ("y", "yes", "aye", "yea"):
             return True
@@ -46,3 +50,7 @@ def y_n(message, error_message="Invalid answer."):
 
 def conceal(string, *, letters_shown=4, letter="*"):
     return f"{letter * (len(string) - letters_shown) + string[(-1 * letters_shown):]}"
+
+
+def clear_console():
+    os.system("clear")

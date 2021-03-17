@@ -1,5 +1,17 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.5
+### Rune OS ALPHA 3.5.1
+Public apps re-added!
+
+- Re-added public apps (can only be installed by admins)
+- Fixed a bug where an app could be installed multiple times
+- Added a feature where the first user of the system is an admin
+- Added the entire `apps` directory to .gitignore (not deleted though)
+- Retitled the bootup text from "RUNE OS ALPHA 3.4" to "RUNE OS ALPHA 3.5.1"
+- Added a `clear_console` function to `utils` to clear the console (only when sensible)
+- Adapted the `run` function of `apps` to check for both account-specific and public apps
+- Fixed a bug where `json_data` was regarded as local so everything broke
+
 ### Rune OS ALPHA 3.5
 Custom apps!
 

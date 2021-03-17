@@ -20,6 +20,7 @@ def save():
 
 
 def launch():
+    utils.clear_console()
     now = int(time.strftime("%H"))
     if now <= 4 or now > 22:
         tod = "night"
@@ -35,11 +36,12 @@ def launch():
     user = json_data["CURRENT"]["username"]
     print(f"Good {tod}, {user}!")
     while True:
-        home()
+        home(True)
 
 
-def home():
+def home(noclear=False):
     global json_data
+    if not noclear: utils.clear_console()
     options = "Enter 1 to run an app.\nEnter 2 to delete your account.\nEnter 3 to install an app."
     if json_data["CURRENT"]["has_admin"]:
         options += "\nEnter 4 to clear all accounts."
@@ -58,22 +60,32 @@ def home():
         logout()
 
 
-def run_app():
+def run_app(noclear=False):
+    if not noclear: utils.clear_console()
+    public_apps = os.listdir("apps")
+    i = 0
+    while i < len(public_apps):
+        if public_apps[i] in ("__init__.py", "__pycache__", "user"):
+            del public_apps[i]
+        i += 1
+    
+    del i
     app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
     if app == "help":
-        for a in os.listdir(f"apps/user/{json_data['CURRENT']['username']}"):
+        for a in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
             print(a)
-        return home()
+        return home(True)
     elif app == "":
         return home()
-    elif app in os.listdir(f"apps/user/{json_data['CURRENT']['username']}"):
+    elif app in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
         return apps.run(app)
     else:
         print("Invalid app.")
-        return run_app()
+        return run_app(True)
 
 
 def delete_account():
+    utils.clear_console()
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         for i in range(len(json_data["ACCOUNTS"])):
@@ -89,10 +101,11 @@ def delete_account():
         account.login()
     else:
         print("Incorrect password.")
-        home()
+        home(True)
 
 
 def install_app():
+    utils.clear_console()
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         app = input("Enter the app you want to get.\n>")
@@ -104,14 +117,27 @@ def install_app():
                     break
         else:
             print("Invalid app.")
-            home()
-        shutil.copytree(f"extensions/{app}", f"apps/user/{json_data['CURRENT']['username']}/{app}")
+            home(True)
+        if os.path.exists(f"apps/{app}") or os.path.exists(f"apps/user/{json_data['CURRENT']['username']}/{app}"):
+            print("App already exists.")
+            home(True)
+        if json_data["CURRENT"]["has_admin"]:
+            public = utils.y_n("Do you want to publicly install this app?")
+            if public:
+                shutil.copytree(f"extensions/{app}", f"apps/{app}")
+            else:
+                shutil.copytree(f"extensions/{app}", f"apps/user/{json_data['CURRENT']['username']}/{app}")
+        else:
+            shutil.copytree(f"extensions/{app}", f"apps/user/{json_data['CURRENT']['username']}/{app}")
+        
     else:
         print("Incorrect password.")
-        home()
+        home(True)
 
 
 def delete_all_accounts():
+    global json_data
+    utils.clear_console()
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         for a in json_data["ACCOUNTS"]:
@@ -122,7 +148,7 @@ def delete_all_accounts():
         account.login()
     else:
         print("Incorrect password.")
-        home()
+        home(True)
 
 
 def logout():

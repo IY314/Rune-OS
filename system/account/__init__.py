@@ -77,70 +77,77 @@ class Account:
                 break
         self.password = hashlib.sha256(utils.ask("Enter a secure password.", confirm=2,
             confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
-        self.has_admin = False
+        self.has_admin = True if json_data["ACCOUNTS"] == [] else False
     
 
 def login():
     global selected_account
-    while True:
-        prompt1 = "Enter 1 to create a new account."
-        try:
-            if json_data["ACCOUNTS"] == []:
-                pass
-            else:
-                prompt1 += "\nEnter 2 to login to an existing account."
-            prompt1 += "\nEnter anything else to shut down."
-        except KeyError:
-            json_data["ACCOUNTS"] = []
-        
-        account_choice = input(prompt1 + "\n>")
-        if account_choice == "1":
-            new_account = Account()
-            utils.dummy(new_account)
-            json_data["CURRENT"] = new_account.dict
-            save()
-            homepage.launch()
-        elif account_choice == "2" and json_data["ACCOUNTS"] != []:
-            update()
-            return match_account()
-        elif account_choice == "ENTER_TEST_MODE":
-            encrypted_pass = hashlib.sha256(b"1234").hexdigest()
-            test_account = Account(username="test-1", password=encrypted_pass, has_admin=True)
-            utils.dummy(test_account)
-            selected_account = test_account.dict
-            json_data["CURRENT"] = selected_account
-            save()
-            return homepage.launch()
+    utils.clear_console()
+    prompt1 = "Enter 1 to create a new account."
+    try:
+        if json_data["ACCOUNTS"] == []:
+            pass
         else:
-            exit()
+            prompt1 += "\nEnter 2 to login to an existing account."
+        prompt1 += "\nEnter anything else to shut down."
+    except KeyError:
+        json_data["ACCOUNTS"] = []
+    
+    account_choice = input(prompt1 + "\n>")
+    if account_choice == "1":
+        utils.clear_console()
+        new_account = Account()
+        utils.dummy(new_account)
+        json_data["CURRENT"] = new_account.dict
+        save()
+        homepage.launch()
+    elif account_choice == "2" and json_data["ACCOUNTS"] != []:
+        update()
+        return match_account()
+    elif account_choice == "ENTER_TEST_MODE":
+        encrypted_pass = hashlib.sha256(b"1234").hexdigest()
+        test_account = Account(username="test-1", password=encrypted_pass, has_admin=True)
+        utils.dummy(test_account)
+        selected_account = test_account.dict
+        json_data["CURRENT"] = selected_account
+        save()
+        return homepage.launch()
+    else:
+        exit()
 
 
-def match_account():
+def match_account(noclear=False):
     global selected_account
+    if not noclear: utils.clear_console()
     existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
     for a in json_data["ACCOUNTS"]:
         if existing_choice == "":
-            return login()
+            code = "CLEAR"
+            break
         if existing_choice == a["username"]:
             selected_account = a
+            code = "PASS"
             break
     else:
         print("Invalid account.")
-        return match_account()
-    return match_password()
+        return match_account(True)
+    if code == "PASS":
+        return match_password()
+    elif code == "CLEAR":
+        return login()
 
 
-def match_password():
+def match_password(noclear=False):
     global selected_account
-    while True:
-        password_choice = input("Password: ")
-        hashed = hashlib.sha256(password_choice.encode("utf-8")).hexdigest()
-        if password_choice == "":
-            return match_account()
-        elif hashed != selected_account["password"]:
-            print("Incorrect password.")
-            continue
-        else:
-            json_data["CURRENT"] = selected_account
-            save()
-            return homepage.launch()
+    if not noclear: utils.clear_console()
+    password_choice = input("Password: ")
+    hashed = hashlib.sha256(password_choice.encode("utf-8")).hexdigest()
+    if password_choice == "":
+        return match_account()
+    elif hashed != selected_account["password"]:
+        print("Incorrect password.")
+        return match_password(True)
+    else:
+        json_data["CURRENT"] = selected_account
+        save()
+        return homepage.launch()
