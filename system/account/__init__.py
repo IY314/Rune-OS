@@ -61,6 +61,8 @@ class Account:
         }
         json_data["ACCOUNTS"].append(self.dict)
         os.makedirs(f"apps/user/{self.username}")
+        with open(f"apps/user/{self.username}/__init__.py", "w+"):
+            pass
         save()
 
     def get_info(self):

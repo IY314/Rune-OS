@@ -1,4 +1,15 @@
 # Rune OS ALPHA (3)
+## Rune OS ALPHA 3.5
+### Rune OS ALPHA 3.5
+Custom apps!
+
+- Added `extensions` directory for extra apps
+- Moved all actions (admin or not) into separate functions in `homepage`
+- Moved all apps into `extensions`, can be installed using the "install app" action
+- Removed support for public apps (might add later)
+- Added new action "install app"
+- Added "incorrect password" messages to actions that needed them
+
 ## Rune OS ALPHA 3.4
 ### Rune OS ALPHA 3.4.1
 Base for custom apps

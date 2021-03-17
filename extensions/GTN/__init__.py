@@ -44,5 +44,5 @@ def home():
                 print("Invalid answer.")
                 continue
     else:
-        from apps import homepage
+        from system import homepage
         homepage.launch()

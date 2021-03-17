@@ -17,7 +17,7 @@ def launch():
         if text == "help":
             print(__doc__)
         elif text == "exit":
-            from apps import homepage
+            from system import homepage
             return homepage.launch()
         else:
             result = parser.parse(lexer.tokenize(text))

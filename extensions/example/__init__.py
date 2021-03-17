@@ -8,7 +8,7 @@ def launch():
         if choice == "1":
             return execute_initial_code()
         else:
-            from apps import homepage
+            from system import homepage
             return homepage.launch()
 
 
