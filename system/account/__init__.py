@@ -1,4 +1,4 @@
-import json, sys, hashlib
+import json, sys, hashlib, os
 sys.path.append("../")
 from system import homepage, utils
 
@@ -60,6 +60,7 @@ class Account:
             "has_admin": self.has_admin
         }
         json_data["ACCOUNTS"].append(self.dict)
+        os.makedirs(f"apps/user/{self.username}")
         save()
 
     def get_info(self):
@@ -97,11 +98,9 @@ def login():
             json_data["CURRENT"] = new_account.dict
             save()
             homepage.launch()
-        elif account_choice == "2":
-            if json_data["ACCOUNTS"] != []:
-                return match_account()
-            else:
-                exit()
+        elif account_choice == "2" and json_data["ACCOUNTS"] != []:
+            update()
+            return match_account()
         elif account_choice == "ENTER_TEST_MODE":
             encrypted_pass = hashlib.sha256(b"1234").hexdigest()
             test_account = Account(username="test-1", password=encrypted_pass, has_admin=True)

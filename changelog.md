@@ -1,5 +1,12 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.4
+### Rune OS ALPHA 3.4.1
+Base for custom apps
+
+- Added new app folder `user`
+- When a user is created a folder with their username is created in `user`
+- Will add support for account-specific apps in the future
+
 ### Rune OS ALPHA 3.4
 Moved system "apps" to a new directory called `system`.
 

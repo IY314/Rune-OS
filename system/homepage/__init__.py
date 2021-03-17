@@ -1,4 +1,4 @@
-import json, time, os, sys, hashlib
+import json, time, os, sys, hashlib, shutil
 sys.path.append("../")
 import apps
 from system import utils
@@ -54,6 +54,7 @@ def home():
                     del json_data["ACCOUNTS"][i]
                     save()
                     break
+            shutil.rmtree(f"apps/user/{json_data['CURRENT']['username']}")
             json_data["CURRENT"] = None
             save()
             from system import account
