@@ -1,6 +1,6 @@
 import json, time, os, sys, hashlib, shutil
 sys.path.append("../")
-import apps, extensions
+import apps, installation
 from system import utils
 
 json_data = {}
@@ -8,14 +8,14 @@ json_data = {}
 
 def update():
     global json_data
-    with open("system/info.json") as f:
+    with open(utils.universal_path("system/info.json")) as f:
         json_data = json.loads(f.read())
 
     del f
 
 
 def save():
-    with open("system/info.json", "w") as f:
+    with open(utils.universal_path("system/info.json"), "w") as f:
         f.write(json.dumps(json_data))
 
 
@@ -73,12 +73,12 @@ def run_app(noclear=False):
     del i
     app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
     if app == "help":
-        for a in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
+        for a in os.listdir(utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")) + public_apps:
             print(a)
         return home()
     elif app == "":
         return home(True)
-    elif app in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
+    elif app in os.listdir(utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")) + public_apps:
         return apps.run(app)
     else:
         print("Invalid app.")
@@ -94,7 +94,7 @@ def delete_account():
                 del json_data["ACCOUNTS"][i]
                 save()
                 break
-        shutil.rmtree(f"apps/user/{json_data['CURRENT']['username']}")
+        shutil.rmtree(utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}"))
         json_data["CURRENT"] = None
         save()
         from system import account
@@ -115,9 +115,9 @@ def install_app():
             if public:
                 path = "apps"
             else:
-                path = os.path.join("apps", "user", json_data["CURRENT"]["username"])
+                path = utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")
         try:
-            extensions.install(app, path)
+            installation.install(app, path)
             home()
         except ModuleNotFoundError as err:
             print(err)
@@ -133,15 +133,15 @@ def uninstall_app():
     if confirmation == json_data["CURRENT"]["password"]:
         app = input("Enter the app you want to uninstall.\n>")
         try:
-            path = os.path.join("apps", "user", json_data["CURRENT"]["username"])
-            location = extensions.search(app, path)
+            path = utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")
+            location = installation.search(app, path)
             if location == "local":
-                extensions.uninstall(app, path)
+                installation.uninstall(app, path)
             else:
                 if not json_data["CURRENT"]["has_admin"]:
                     print("Access denied.")
                     home()
-                extensions.uninstall(app, "apps")
+                installation.uninstall(app, "apps")
                 home()
         except ModuleNotFoundError as err:
             print(err)
@@ -157,7 +157,7 @@ def delete_all_accounts():
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         for a in json_data["ACCOUNTS"]:
-            shutil.rmtree(f"apps/user/{a['username']}")
+            shutil.rmtree(utils.universal_path(f"apps/user{a['username']}"))
         json_data = {"CURRENT": None, "ACCOUNTS": []}
         save()
         from system import account

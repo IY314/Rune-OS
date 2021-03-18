@@ -1,5 +1,11 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.5
+### Rune OS ALPHA 3.5.4
+- Incremented the bootup text to "3.5.4" (I really need to remember to do this)
+- Renamed `extensions` to `installation`
+- Added a function `universal_path` to `utils` that takes in a Linux-based path and calls `os.path.join()`
+- Wrapped all paths in `universal_path`
+
 ### Rune OS ALPHA 3.5.3
 Organization Update
 

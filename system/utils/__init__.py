@@ -1,6 +1,7 @@
-import os, time, sys, re
+import os, time, sys
 
 ALL = None
+
 
 def dummy(*args, **kw):
     pass
@@ -22,7 +23,7 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, e
             print(error_message)
             continue
         if confirm == 1:
-            if y_n(confirm_response, error_message):
+            if y_n(confirm_response, error_message=error_message):
                 return ans
             else:
                 continue
@@ -34,18 +35,26 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, e
         return ans
 
 
-def y_n(message, error_message="Invalid answer."):
+del ALL
+
+
+def y_n(message, *, error_message="Invalid answer.", yes=("y", "yes", "aye", "yea"),  no=("n", "no", "nope")):
+    """Translates user input into a boolean value (asks yes or no)"""
     while True:
         clear_console()
         ans = input(message + "\n>")
-        if ans.lower() in ("y", "yes", "aye", "yea"):
+        if ans.lower() in yes:
             return True
-        elif ans.lower() not in ("n", "no", "nope"):
-            print(error_message)
-            continue
-        else:
+        elif ans.lower() in no:
             return False
+        else:
+            print(error_message)
+
+
+def universal_path(path: str):
+    return os.path.join(*path.split("/"))
 
 
 def clear_console():
-    os.system("clear")
+    """Clears the console."""
+    os.system("cls" if os.name == "nt" else "clear")

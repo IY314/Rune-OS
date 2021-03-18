@@ -1,7 +1,7 @@
 import shutil, os
 
 def install(app_name, path="apps"):
-    apps = os.listdir("extensions")
+    apps = os.listdir("installation")
     installed = os.listdir(path)
     a = 0
     while a < len(installed):
@@ -16,7 +16,7 @@ def install(app_name, path="apps"):
     del a
     for a in apps:
         if app_name == a:
-            shutil.copytree(os.path.join("extensions", app_name), os.path.join(path, app_name))
+            shutil.copytree(os.path.join("installation", app_name), os.path.join(path, app_name))
             break
     
     else:

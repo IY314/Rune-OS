@@ -11,10 +11,10 @@ DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
 def update():
     global json_data
     try:
-        with open("system/info.json") as f:
+        with open(utils.universal_path("system/info.json")) as f:
             json_data = json.loads(f.read())
     except FileNotFoundError:
-        with open("system/info.json", "w+") as f:
+        with open(utils.universal_path("system/info.json"), "w+") as f:
             f.write(json.dumps(DEFAULT_JSON_DATA))
             json_data = DEFAULT_JSON_DATA
 
@@ -25,7 +25,7 @@ update()
 
 
 def save():
-    with open("system/info.json", "w") as f:
+    with open(utils.universal_path("system/info.json"), "w") as f:
         f.write(json.dumps(json_data))
     del f
 
@@ -60,8 +60,8 @@ class Account:
             "has_admin": self.has_admin
         }
         json_data["ACCOUNTS"].append(self.dict)
-        os.makedirs(f"apps/user/{self.username}")
-        with open(f"apps/user/{self.username}/__init__.py", "w+"):
+        os.makedirs(utils.universal_path(f"apps/user/{self.username}"))
+        with open(utils.universal_path(f"apps/user/{self.username}/__init__.py"), "w+"):
             pass
         save()
 
