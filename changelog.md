@@ -1,10 +1,14 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.5
 ### Rune OS ALPHA 3.5.2
-Nothing much
+Cleanup Update
 
 - Deleted obsolete `settings` module
 - Added a function `tprint` to `utils`, functions like `print` but with realistic typing animation
+- Deleted obsolete constant `DEBUG`
+- Removed the `ENTER_TEST_MODE` option (it was only used for admin access and 3.5.1 implemented that)
+- Fixed an if-else clause to make it require less code
+- Fixed several bugs in the `GTN` app (from the time I coded it)
 
 ### Rune OS ALPHA 3.5.1
 Public apps re-added!

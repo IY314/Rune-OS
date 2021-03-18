@@ -11,9 +11,13 @@ def loop(low, high, max_guesses):
     number = random.randint(low, high)
     while True:
         print(f"Guess a number between {str(low)} and {str(high)}. You have {str(guesses)} guesses.")
-        guess = input(">")
+        try:
+            guess = int(input(">"))
+        except ValueError:
+            print("Invalid answer.")
+            continue
         if guess == number:
-            print(f"You guessed the number in {str(max_guesses - guesses)} guesses!")
+            print(f"You guessed the number in {str(max_guesses - guesses + 1)} guesses!")
             return home()
         elif guess > number:
             if guesses > 5: print("Try lower.")
@@ -40,6 +44,9 @@ def home():
                 return loop(0, 50, 15)
             elif diff == "3":
                 return loop(0, 100, 30)
+            elif diff == "":
+                from system import homepage
+                homepage.launch()
             else:
                 print("Invalid answer.")
                 continue

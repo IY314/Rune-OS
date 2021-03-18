@@ -5,7 +5,6 @@ from system import homepage, utils
 selected_account = None
 json_data = {}
 
-DEBUG = True
 DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
 
 
@@ -86,9 +85,7 @@ def login():
     utils.clear_console()
     prompt1 = "Enter 1 to create a new account."
     try:
-        if json_data["ACCOUNTS"] == []:
-            pass
-        else:
+        if json_data["ACCOUNTS"] != []:
             prompt1 += "\nEnter 2 to login to an existing account."
         prompt1 += "\nEnter anything else to shut down."
     except KeyError:
@@ -105,14 +102,6 @@ def login():
     elif account_choice == "2" and json_data["ACCOUNTS"] != []:
         update()
         return match_account()
-    elif account_choice == "ENTER_TEST_MODE":
-        encrypted_pass = hashlib.sha256(b"1234").hexdigest()
-        test_account = Account(username="test-1", password=encrypted_pass, has_admin=True)
-        utils.dummy(test_account)
-        selected_account = test_account.dict
-        json_data["CURRENT"] = selected_account
-        save()
-        return homepage.launch()
     else:
         exit()
 
