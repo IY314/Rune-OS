@@ -1,5 +1,15 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.5
+### Rune OS ALPHA 3.5.3
+Organization Update
+
+- Added new `library` module to `system`
+- Moved unused but useful functions (`tprint`, `conceal`, and `repeat`) to `library`
+- Added new functions `install`, `uninstall`, and `search` to `extensions`
+- `install` installs an app, `uninstall` uninstalls an app, and `search` returns either "local" or "public" depending on whether an app is installed locally or publicly
+- Added new action "uninstall app"
+- Adapted functions in `homepage` to use the functions in `extensions`
+
 ### Rune OS ALPHA 3.5.2
 Cleanup Update
 

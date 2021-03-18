@@ -35,16 +35,15 @@ def launch():
     update()
     user = json_data["CURRENT"]["username"]
     print(f"Good {tod}, {user}!")
-    while True:
-        home(True)
+    home()
 
 
-def home(noclear=False):
+def home(clear=False):
     global json_data
-    if not noclear: utils.clear_console()
-    options = "Enter 1 to run an app.\nEnter 2 to delete your account.\nEnter 3 to install an app."
+    if clear: utils.clear_console()
+    options = "Enter 1 to run an app.\nEnter 2 to delete your account.\nEnter 3 to install an app.\nEnter 4 to uninstall an app."
     if json_data["CURRENT"]["has_admin"]:
-        options += "\nEnter 4 to clear all accounts."
+        options += "\nEnter 5 to clear all accounts."
     options += "\nEnter anything else to logout."
     print(options)
     action = input(">")
@@ -54,7 +53,9 @@ def home(noclear=False):
         delete_account()
     elif action == "3":
         install_app()
-    elif action == "4" and json_data["CURRENT"]["has_admin"]:
+    elif action == "4":
+        uninstall_app()
+    elif action == "5" and json_data["CURRENT"]["has_admin"]:
         delete_all_accounts()
     else:
         logout()
@@ -74,9 +75,9 @@ def run_app(noclear=False):
     if app == "help":
         for a in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
             print(a)
-        return home(True)
-    elif app == "":
         return home()
+    elif app == "":
+        return home(True)
     elif app in os.listdir(f"apps/user/{json_data['CURRENT']['username']}") + public_apps:
         return apps.run(app)
     else:
@@ -101,7 +102,7 @@ def delete_account():
         account.login()
     else:
         print("Incorrect password.")
-        home(True)
+        home()
 
 
 def install_app():
@@ -109,30 +110,45 @@ def install_app():
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         app = input("Enter the app you want to get.\n>")
-        for a in os.listdir("extensions"):
-            if a in ("__init__.py", "__pycache__"):
-                continue
-            else:
-                if app == a:
-                    break
-        else:
-            print("Invalid app.")
-            home(True)
-        if os.path.exists(f"apps/{app}") or os.path.exists(f"apps/user/{json_data['CURRENT']['username']}/{app}"):
-            print("App already exists.")
-            home(True)
         if json_data["CURRENT"]["has_admin"]:
             public = utils.y_n("Do you want to publicly install this app?")
             if public:
-                shutil.copytree(f"extensions/{app}", f"apps/{app}")
+                path = "apps"
             else:
-                shutil.copytree(f"extensions/{app}", f"apps/user/{json_data['CURRENT']['username']}/{app}")
-        else:
-            shutil.copytree(f"extensions/{app}", f"apps/user/{json_data['CURRENT']['username']}/{app}")
-        
+                path = os.path.join("apps", "user", json_data["CURRENT"]["username"])
+        try:
+            extensions.install(app, path)
+            home()
+        except ModuleNotFoundError as err:
+            print(err)
+            home()
     else:
         print("Incorrect password.")
-        home(True)
+        home()
+
+
+def uninstall_app():
+    utils.clear_console()
+    confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
+    if confirmation == json_data["CURRENT"]["password"]:
+        app = input("Enter the app you want to uninstall.\n>")
+        try:
+            path = os.path.join("apps", "user", json_data["CURRENT"]["username"])
+            location = extensions.search(app, path)
+            if location == "local":
+                extensions.uninstall(app, path)
+            else:
+                if not json_data["CURRENT"]["has_admin"]:
+                    print("Access denied.")
+                    home()
+                extensions.uninstall(app, "apps")
+                home()
+        except ModuleNotFoundError as err:
+            print(err)
+            home()
+    else:
+        print("Incorrect password.")
+        home()
 
 
 def delete_all_accounts():
@@ -148,7 +164,7 @@ def delete_all_accounts():
         account.login()
     else:
         print("Incorrect password.")
-        home(True)
+        home()
 
 
 def logout():

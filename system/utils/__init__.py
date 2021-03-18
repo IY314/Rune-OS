@@ -1,34 +1,9 @@
 import os, time, sys, re
 
 ALL = None
-DEFAULT_DELAYS = {
-    r"\n": 0.5,
-    r"\s": 0.3,
-    r"\w": 0.1
-}
-
 
 def dummy(*args, **kw):
     pass
-
-
-def tprint(*vals, sep=" ", end="\n", file=sys.stdout, delays=DEFAULT_DELAYS):
-    string = sep.join([str(val) for val in vals]) + end
-    try:
-        dummy(
-            delays[r"\n"],
-            delays[r"\s"],
-            delays[r"\w"]
-        )
-    except KeyError:
-        raise TypeError("Parameter `delays` must have at least three values: '\\n', '\\s', and '\\w'.")
-    for char in string:
-        file.write(char)
-        file.flush()
-        for k in delays:
-            if re.compile(k, re.VERBOSE).search(char):
-                delay = delays[k]
-        time.sleep(delay)
 
 
 def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, error_message="Invalid answer.", min_letters=4):
@@ -70,10 +45,6 @@ def y_n(message, error_message="Invalid answer."):
             continue
         else:
             return False
-
-
-def conceal(string, *, letters_shown=4, letter="*"):
-    return f"{letter * (len(string) - letters_shown) + string[(-1 * letters_shown):]}"
 
 
 def clear_console():
