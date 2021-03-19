@@ -1,4 +1,14 @@
 # Rune OS ALPHA (3)
+## Rune OS ALPHA 3.6
+### Rune OS ALPHA 3.6
+- Added `docs.md`
+- Removed `example` app and `rosa.txt`
+- Adapted `README.md` to redirect to `docs.md`
+- Added pre-installed, unremovable app `test` for testing apps
+- Added folder `testing` to test apps inside
+- Fixed a bug where regular users would not be able to install apps due to a variable being used but not declared
+- Temporarily removed `testing` and `apps` from `.gitignore` (they will be re-added later) because GitHub would not recognize the changes otherwise
+
 ## Rune OS ALPHA 3.5
 ### Rune OS ALPHA 3.5.4
 - Incremented the bootup text to "3.5.4" (I really need to remember to do this)

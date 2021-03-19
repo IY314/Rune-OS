@@ -110,11 +110,10 @@ def install_app():
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         app = input("Enter the app you want to get.\n>")
+        path = "apps"
         if json_data["CURRENT"]["has_admin"]:
             public = utils.y_n("Do you want to publicly install this app?")
-            if public:
-                path = "apps"
-            else:
+            if not public:
                 path = utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")
         try:
             installation.install(app, path)

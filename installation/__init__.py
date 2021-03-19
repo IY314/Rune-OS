@@ -27,7 +27,7 @@ def uninstall(app_name, path):
     apps = os.listdir(path)
     a = 0
     while a < len(apps):
-        if apps[a] in ("__init__.py", "__pycache__", "user"):
+        if apps[a] in ("__init__.py", "__pycache__", "user", "test"):
             del apps[a]
         a += 1
     del a
@@ -37,7 +37,7 @@ def uninstall(app_name, path):
             break
 
     else:
-        raise ModuleNotFoundError("App not found.")
+        raise ModuleNotFoundError("App not found or inaccessible.")
 
 
 def search(app_name, user_path):

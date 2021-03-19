@@ -19,4 +19,4 @@ This OS can:
 
 ## Appendix
 
-*Apps are ONLY supported in `ROSA` (RUNE OS ALPHA) format (see `rosa.txt`)
+*Apps are ONLY supported in `ROSA` (RUNE OS ALPHA) format (see `doc.md` for app-development information)
