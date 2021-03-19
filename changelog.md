@@ -1,5 +1,11 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.6
+### Rune OS ALPHA 3.6.1
+Publication Update
+
+- Made `main.py` point to the authors of this repository
+- Re-added `testing`, `apps`, and added `installation` to `.gitignore`
+
 ### Rune OS ALPHA 3.6
 - Added `docs.md`
 - Removed `example` app and `rosa.txt`
