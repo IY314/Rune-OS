@@ -1,4 +1,4 @@
-import re, time, sys
+import re, time, sys, _io
 from system import utils
 
 DEFAULT_DELAYS = {
@@ -9,6 +9,9 @@ DEFAULT_DELAYS = {
 
 
 def tprint(*vals, sep=" ", end="\n", file=sys.stdout, delays=DEFAULT_DELAYS):
+    if type(file) == _io.TextIOWrapper:
+        print(*vals, sep=sep, end=end, file=file)
+        return
     string = sep.join([str(val) for val in vals]) + end
     try:
         utils.dummy(
@@ -19,8 +22,7 @@ def tprint(*vals, sep=" ", end="\n", file=sys.stdout, delays=DEFAULT_DELAYS):
     except KeyError:
         raise TypeError("Parameter `delays` must have at least three values: '\\n', '\\s', and '\\w'.")
     for char in string:
-        file.write(char)
-        file.flush()
+        print(char, file=file, flush=True)
         for k in delays:
             if re.compile(k, re.VERBOSE).search(char):
                 delay = delays[k]
@@ -36,7 +38,7 @@ def repeat(times):
         def wrapper(*args, **kw):
             for _ in range(times):
                 func(*args, **kw)
-        
+
         return wrapper
-    
+
     return decorator

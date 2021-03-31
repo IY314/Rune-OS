@@ -1,5 +1,11 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.6
+### Rune OS ALPHA 3.6.2
+- Added credits to the bootup text
+- Removed "Booting up..." from bootup text
+- Added exponentation to the `calc` module
+- `tprint()` only supports writing to console, not to files
+
 ### Rune OS ALPHA 3.6.1
 Publication Update
 

@@ -1,4 +1,5 @@
 # Rune OS ALPHA Documentation
+
 ## App Development
 ### Building an App
 Your app must be in the `installation` package/folder. If you put it in `apps`, it will very likely be deleted and your app will be gone.
@@ -101,3 +102,17 @@ Let's dissect it line by line.
 
 ### Testing an App
 The `test` module will help you sniff out bugs in your app. Place your app into the `testing` folder and then run the `test` app.
+
+### Using library functions
+The `library` module will provide unused but useful functions for app developers. To use other functions such as `y_n()` and `ask()`, use `utils`. For a more in-depth description, look at the functions' `__doc__`s.
+
+#### Library Functions:
+- `tprint()` - a function that prints like a normal human being.
+- `conceal()` - a function to conceal a string using a specified letter. Ex: 12345678 -> ****5678.
+- `@repeat()` - a decorator to repeat a certain function x times.
+
+#### Utility Functions:
+- `ask()` - asks a question.
+- `y_n()` - calls `ask()` and returns a boolean value based on the answer.
+- `universal_path()` - returns the system-specific path using `os.path.join()`.
+- `clear_console()` - clears the console Rune OS is being run on.

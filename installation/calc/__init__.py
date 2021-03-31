@@ -1,7 +1,10 @@
 """
 The Calculator (uses Sly Lex Yacc)
 - has full order of operations
-- supports +, -, *, and /
+- supports +, -, *, /, and ^
+- Special Commands:
+    help - Shows this menu
+    exit - Exits this app
 """
 from sly import Lexer, Parser
 import sys
@@ -21,11 +24,12 @@ def launch():
             return homepage.launch()
         else:
             result = parser.parse(lexer.tokenize(text))
-            print(result)
+            if result != None:
+                print(result)
 
 
 class CalcLexer(Lexer):
-    tokens = { NUMBER, PLUS, MINUS, TIMES, DIVIDE }
+    tokens = { "NUMBER", "PLUS", "MINUS", "TIMES", "DIVIDE", "EXP" }
 
     literals = { "(", ")" }
 
@@ -35,10 +39,15 @@ class CalcLexer(Lexer):
     MINUS = r"-"
     TIMES = r"\*"
     DIVIDE = r"/"
+    EXP = r"\^"
 
-    @_(r"\d+(\.)?\d*")
+    @_(r"\d+(\.\d+)?")
     def NUMBER(self, t):
-        t.value = float(t.value)
+        int_value = int(t.value)
+        if int_value != t.value:
+            t.value = float(t.value)
+        else:
+            t.value = int_value
         return t
 
     @_(r"\n+")
@@ -46,12 +55,15 @@ class CalcLexer(Lexer):
         self.lineno += t.value.count("\n")
     
     def error(self, t):
-        print(f"Line {str(self.lineno)}: Bad character {t.value[0]}")
+        print(f"Line {str(self.lineno)}: Invalid character {t.value[0]}")
         self.index += 1
 
 
 class CalcParser(Parser):
     tokens = CalcLexer.tokens
+
+    def error(self, token):
+        print("Invalid syntax")
 
     @_("expr PLUS term")
     def expr(self, p):
@@ -71,16 +83,29 @@ class CalcParser(Parser):
     
     @_("term DIVIDE factor")
     def term(self, p):
+        if p.factor == 0:
+            if p.term != 0:
+                return "Infinity"
+            else:
+                return "Undefined"
         return p.term / p.factor
     
     @_("factor")
     def term(self, p):
         return p.factor
     
-    @_("NUMBER")
+    @_("number EXP NUMBER")
     def factor(self, p):
+        return p.number ** p.NUMBER
+    
+    @_("number")
+    def factor(self, p):
+        return p.number
+    
+    @_("NUMBER")
+    def number(self, p):
         return p.NUMBER
     
     @_("\"(\" expr \")\"")
-    def factor(self, p):
+    def number(self, p):
         return p.expr
