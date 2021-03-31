@@ -1,8 +1,7 @@
-import json, sys, hashlib, os
+import json, sys, hashlib, os, getpass
 sys.path.append("../")
 from system import homepage, utils
 
-selected_account = None
 json_data = {}
 
 DEFAULT_JSON_DATA = {"CURRENT": None, "ACCOUNTS": []}
@@ -31,27 +30,15 @@ def save():
 
 
 class Account:
-    params = (
-        "username",
-        "password",
-        "has_admin"
-    )
     accounts = []
 
-    def __init__(self, **kw):
-        if kw:
-            for k in kw:
-                if k not in self.params:
-                    raise TypeError(f"Expected valid parameter, received '{k}'.")
-                setattr(self, k, kw[k])
-            try:
-                utils.dummy(
-                    self.username,
-                    self.password,
-                    self.has_admin
-                )
-            except AttributeError:
+    def __init__(self, *, username=None, password=None, has_admin=None):
+        if any((username, password, has_admin)):
+            if not all((username, password, has_admin)):
                 raise TypeError("Expected a value for username, password, and has_admin.")
+            self.username = username
+            self.password = password
+            self.has_admin = has_admin
         else:
             self.get_info()
         self.dict = {
@@ -78,11 +65,10 @@ class Account:
         self.password = hashlib.sha256(utils.ask("Enter a secure password.", confirm=2,
             confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
         self.has_admin = True if json_data["ACCOUNTS"] == [] else False
-    
 
-def login():
-    global selected_account
-    utils.clear_console()
+
+def login(clear=True):
+    if clear: utils.clear_console()
     prompt1 = "Enter 1 to create a new account."
     try:
         if json_data["ACCOUNTS"] != []:
@@ -90,7 +76,7 @@ def login():
         prompt1 += "\nEnter anything else to shut down."
     except KeyError:
         json_data["ACCOUNTS"] = []
-    
+
     account_choice = input(prompt1 + "\n>")
     if account_choice == "1":
         utils.clear_console()
@@ -106,9 +92,8 @@ def login():
         exit()
 
 
-def match_account(noclear=False):
-    global selected_account
-    if not noclear: utils.clear_console()
+def match_account(clear=True):
+    if clear: utils.clear_console()
     existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
     for a in json_data["ACCOUNTS"]:
         if existing_choice == "":
@@ -120,23 +105,22 @@ def match_account(noclear=False):
             break
     else:
         print("Invalid account.")
-        return match_account(True)
+        return match_account(False)
     if code == "PASS":
-        return match_password()
+        return match_password(selected_account)
     elif code == "CLEAR":
         return login()
 
 
-def match_password(noclear=False):
-    global selected_account
-    if not noclear: utils.clear_console()
-    password_choice = input("Password: ")
+def match_password(selected_account, clear=True):
+    if clear: utils.clear_console()
+    password_choice = getpass.getpass("Password: ")
     hashed = hashlib.sha256(password_choice.encode("utf-8")).hexdigest()
     if password_choice == "":
         return match_account()
     elif hashed != selected_account["password"]:
         print("Incorrect password.")
-        return match_password(True)
+        return match_password(selected_account, False)
     else:
         json_data["CURRENT"] = selected_account
         save()

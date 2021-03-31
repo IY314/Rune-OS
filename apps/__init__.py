@@ -3,11 +3,6 @@ import importlib, os, json
 json_data = {}
 
 
-def save():
-    with open("system/info.json", "w") as f:
-        f.write(json.dumps(json_data))
-
-
 def update():
     global json_data
     with open("system/info.json") as f:

@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Rune OS ALPHA is an official rewrite of the Rune OS Python-based operating system.
+Rune OS 3 is an official continuation of the Rune OS Python-based operating system.
 
 ## How to use
 
-1. Download Rune OS ALPHA
+1. Download Rune OS 3
 2. Run `main.py`
 
 Bug reporting will be much appreciated.
@@ -19,4 +19,4 @@ This OS can:
 
 ## Appendix
 
-*Apps are ONLY supported in `ROSA` (RUNE OS ALPHA) format (see `doc.md` for app-development information)
+*See `docs.md` for app-development information and acceptable format

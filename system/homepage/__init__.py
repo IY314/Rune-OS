@@ -69,7 +69,7 @@ def run_app(noclear=False):
         if public_apps[i] in ("__init__.py", "__pycache__", "user"):
             del public_apps[i]
         i += 1
-    
+
     del i
     app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
     if app == "help":
@@ -156,7 +156,7 @@ def delete_all_accounts():
     confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
     if confirmation == json_data["CURRENT"]["password"]:
         for a in json_data["ACCOUNTS"]:
-            shutil.rmtree(utils.universal_path(f"apps/user{a['username']}"))
+            shutil.rmtree(utils.universal_path(f"apps/user/{a['username']}"))
         json_data = {"CURRENT": None, "ACCOUNTS": []}
         save()
         from system import account

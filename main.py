@@ -3,6 +3,10 @@
 
 from system import account
 
-print("---RUNE OS ALPHA 3.6.2---")
-print("Made by @IY314 and @mrfoogles")
-account.login()
+print("""
++------------- RUNE OS 3.6.3 -------------+
+|      Made by @IY314 and @mrfoogles      |
+| https://github.com/IY314/Rune-OS-ALPHA  |
++-----------------------------------------+
+""")
+account.login(False)

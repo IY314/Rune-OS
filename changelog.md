@@ -1,5 +1,13 @@
 # Rune OS ALPHA (3)
 ## Rune OS ALPHA 3.6
+### Rune OS 3.6.3
+- Removed "ALPHA" from Rune OS, version numbers were too confusing when combined
+- Fixed a long-running typo in `README.md` and also reformatted it
+- Removed obsolete `save()` function from `apps`
+- Added password security with the `getpass` module
+- Fixed a major bug with file paths in `homepage`
+- Reduced the number of global variables in all modules
+
 ### Rune OS ALPHA 3.6.2
 - Added credits to the bootup text
 - Removed "Booting up..." from bootup text

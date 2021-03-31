@@ -1,19 +1,19 @@
-import os, time, sys
-
-ALL = None
+import os, time, sys, getpass
 
 
 def dummy(*args, **kw):
     pass
 
 
-def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, error_message="Invalid answer.", min_letters=4):
+def ask(question, *, confirm=0, confirm_response=None, accepted_responses=None, error_message="Invalid answer.", min_letters=4):
     """Asks a question specified by the user."""
     if confirm:
         if not confirm_response:
             raise TypeError("Argument confirm is True, but there is no value set for confirm_response!")
     while True:
         clear_console()
+        if confirm == 2:
+            input = getpass.getpass
         ans = input(question + "\n>")
         if accepted_responses:
             if ans not in accepted_responses:
@@ -33,9 +33,6 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=ALL, e
                 print("They do not match!")
                 continue
         return ans
-
-
-del ALL
 
 
 def y_n(message, *, error_message="Invalid answer.", yes=("y", "yes", "aye", "yea"),  no=("n", "no", "nope")):
