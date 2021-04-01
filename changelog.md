@@ -1,13 +1,25 @@
 # Rune OS ALPHA (3)
-## Rune OS ALPHA 3.6
-### Rune OS 3.6.3
+## Rune OS 3.7
+### Rune OS 3.7.1
+- Incremented previous version to 3.7 (3.6.3 and 3.7 are the same essentially)
+- Added admin commands "create account" and "change access" to control admin access of other users
+- Added a WIP notice to `docs.md`
+- Changed the link in the bootup text because of repository renaming
+- Tweaked `README.md` again
+- Added capability to get info on only one field in account creation
+- Allowed support for one or more parameters in account instance creation
+- Added `check_password()` function in `homepage` to reuse repetitive code
+
+### Rune OS 3.6.3 (3.7)
 - Removed "ALPHA" from Rune OS, version numbers were too confusing when combined
 - Fixed a long-running typo in `README.md` and also reformatted it
 - Removed obsolete `save()` function from `apps`
 - Added password security with the `getpass` module
 - Fixed a major bug with file paths in `homepage`
 - Reduced the number of global variables in all modules
+- Removed double negatives in internal system
 
+## Rune OS ALPHA 3.6
 ### Rune OS ALPHA 3.6.2
 - Added credits to the bootup text
 - Removed "Booting up..." from bootup text

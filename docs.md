@@ -1,4 +1,6 @@
 # Rune OS ALPHA Documentation
+WIP
+(for now just look at `changelog.md`)
 
 ## App Development
 ### Building an App
@@ -70,6 +72,7 @@ Rune OS
 All apps must be built using Python 3 code. Here is an example of an app:
 
 ```py
+#! python3
 # example/__init__.py
 
 def launch():
@@ -84,7 +87,6 @@ def launch():
 
 def execute_some_code():
     print("Hello World")
-
 ```
 
 Let's dissect it line by line.

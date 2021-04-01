@@ -1,4 +1,4 @@
-# Rune OS ALPHA
+# Rune OS
 
 ## Introduction
 
@@ -14,8 +14,10 @@ Bug reporting will be much appreciated.
 This OS can:
 
 * manage accounts with passwords
-* support apps*
-* and much more!
+* manage admin access
+* support apps* with creation, installation, and testing
+
+All capabilities are in `docs.md`.
 
 ## Appendix
 

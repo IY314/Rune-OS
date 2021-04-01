@@ -34,11 +34,21 @@ class Account:
 
     def __init__(self, *, username=None, password=None, has_admin=None):
         if any((username, password, has_admin)):
-            if not all((username, password, has_admin)):
-                raise TypeError("Expected a value for username, password, and has_admin.")
-            self.username = username
-            self.password = password
-            self.has_admin = has_admin
+            if not username:
+                self.get_info("username")
+            else:
+                self.username = username
+
+            if not password:
+                self.get_info("password")
+            else:
+                self.password = password
+
+            if has_admin == None:
+                self.get_info("has_admin")
+            else:
+                self.has_admin = has_admin
+
         else:
             self.get_info()
         self.dict = {
@@ -52,19 +62,38 @@ class Account:
             pass
         save()
 
-    def get_info(self):
-        while True:
-            possible_username = utils.ask("Enter a username.")
-            for user in json_data["ACCOUNTS"]:
-                if possible_username == user["username"]:
-                    print("That username is taken.")
+    def get_info(self, field=None):
+        def username():
+            while True:
+                possible_username = utils.ask("Enter a username.")
+                for user in json_data["ACCOUNTS"]:
+                    if possible_username == user["username"]:
+                        print("That username is taken.")
+                        break
+                else:
+                    self.username = possible_username
                     break
+
+        def password():
+            self.password = hashlib.sha256(utils.ask("Enter a secure password.", confirm=2,
+                confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
+
+        def has_admin():
+            self.has_admin = True if json_data["ACCOUNTS"] == [] else False
+
+        if field:
+            if field == "username":
+                username()
+            elif field == "password":
+                password()
+            elif field == "has_admin":
+                has_admin()
             else:
-                self.username = possible_username
-                break
-        self.password = hashlib.sha256(utils.ask("Enter a secure password.", confirm=2,
-            confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
-        self.has_admin = True if json_data["ACCOUNTS"] == [] else False
+                raise TypeError("Invalid field")
+        else:
+            username()
+            password()
+            has_admin()
 
 
 def login(clear=True):

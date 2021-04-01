@@ -1,12 +1,9 @@
-# Rune OS
-# Created by @IY314 and @mrfoogles
-
 from system import account
 
 print("""
-+------------- RUNE OS 3.6.3 -------------+
++------------- Rune OS 3.7.1 -------------+
 |      Made by @IY314 and @mrfoogles      |
-| https://github.com/IY314/Rune-OS-ALPHA  |
+|    https://github.com/IY314/Rune-OS     |
 +-----------------------------------------+
 """)
 account.login(False)
