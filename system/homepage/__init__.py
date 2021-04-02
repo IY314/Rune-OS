@@ -1,7 +1,7 @@
-import json, time, os, sys, hashlib, shutil
+import json, time, os, sys, hashlib, shutil, getpass
 sys.path.append("../")
 import apps, installation
-from system import utils
+from system import utils, library
 
 json_data = {}
 
@@ -20,8 +20,8 @@ def save():
 
 
 def check_password():
-    global json_data
-    confirmation = hashlib.sha256(input("Enter your password to confirm.\n>").encode("utf-8")).hexdigest()
+    print(utils.make_box("Enter your password to confirm.", title=False))
+    confirmation = hashlib.sha256(getpass.getpass(">").encode("utf-8")).hexdigest()
     return confirmation == json_data["CURRENT"]["password"]
 
 
@@ -40,27 +40,41 @@ def launch():
         raise ValueError(f"The time is not handled ({now})!")
     update()
     user = json_data["CURRENT"]["username"]
-    print(f"Good {tod}, {user}!")
-    home()
+    greeting = f"Good {tod}, {user}!"
+    return home(greeting=greeting)
 
 
-def home(clear=False):
+
+def home(clear=False, greeting=None):
     global json_data
     if clear: utils.clear_console()
-    options = "Enter 1 to run an app.\nEnter 2 to delete your account.\nEnter 3 to install an app.\nEnter 4 to uninstall an app."
+    options = [
+        "Enter 1 to run an app.",
+        "Enter 2 to install an app.",
+        "Enter 3 to uninstall an app.",
+        "Enter 4 to delete your account."
+    ]
     if json_data["CURRENT"]["has_admin"]:
-        options += "\nEnter 5 to clear all accounts.\nEnter 6 to remotely create an account.\nEnter 7 to promote or demote an account's admin access."
-    options += "\nEnter anything else to logout."
-    print(options)
+        options += [
+            "Enter 5 to clear all accounts.",
+            "Enter 6 to remotely create an account.",
+            "Enter 7 to promote or demote an account."
+        ]
+    options.append("Enter anything else to logout.")
+    if not greeting:
+        title = False
+    else:
+        options.insert(0, greeting)
+    print(utils.make_box(*options, form="left", title=title))
     action = input(">")
     if action == "1":
         run_app()
     elif action == "2":
-        delete_account()
-    elif action == "3":
         install_app()
-    elif action == "4":
+    elif action == "3":
         uninstall_app()
+    elif action == "4":
+        delete_account()
     elif action == "5" and json_data["CURRENT"]["has_admin"]:
         delete_all_accounts()
     elif action == "6" and json_data["CURRENT"]["has_admin"]:
@@ -71,8 +85,8 @@ def home(clear=False):
         logout()
 
 
-def run_app(noclear=False):
-    if not noclear: utils.clear_console()
+def run_app(clear=True):
+    if clear: utils.clear_console()
     public_apps = os.listdir("apps")
     i = 0
     while i < len(public_apps):
@@ -92,7 +106,7 @@ def run_app(noclear=False):
         return apps.run(app)
     else:
         print("Invalid app.")
-        return run_app(True)
+        return run_app(False)
 
 
 def delete_account():
@@ -149,7 +163,7 @@ def uninstall_app():
                     home()
                 installation.uninstall(app, "apps")
                 home()
-        except ModuleNotFoundError as err:
+        except Exception as err:
             print(err)
             home()
     else:
@@ -179,7 +193,7 @@ def create_account():
         from system import account
         utils.clear_console()
         new_account = account.Account(has_admin=has_admin)
-        utils.dummy(new_account)
+        library.dummy(new_account)
         json_data["CURRENT"] = new_account.dict
         save()
         launch()

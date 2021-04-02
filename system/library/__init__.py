@@ -1,5 +1,4 @@
 import re, time, sys, _io
-from system import utils
 
 DEFAULT_DELAYS = {
     r"\n": 0.5,
@@ -14,7 +13,7 @@ def tprint(*vals, sep=" ", end="\n", file=sys.stdout, delays=DEFAULT_DELAYS):
         return
     string = sep.join([str(val) for val in vals]) + end
     try:
-        utils.dummy(
+        dummy(
             delays[r"\n"],
             delays[r"\s"],
             delays[r"\w"]
@@ -42,3 +41,16 @@ def repeat(times):
         return wrapper
 
     return decorator
+
+
+def dummy(*args, **kw):
+    pass
+
+
+def is_even(num):
+    raw = num / 2
+    as_int = int(num / 2)
+    if as_int == raw:
+        return True
+    else:
+        return False

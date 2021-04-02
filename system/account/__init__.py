@@ -1,6 +1,6 @@
 import json, sys, hashlib, os, getpass
 sys.path.append("../")
-from system import homepage, utils
+from system import homepage, utils, library
 
 json_data = {}
 
@@ -98,19 +98,18 @@ class Account:
 
 def login(clear=True):
     if clear: utils.clear_console()
-    prompt1 = "Enter 1 to create a new account."
-    try:
-        if json_data["ACCOUNTS"] != []:
-            prompt1 += "\nEnter 2 to login to an existing account."
-        prompt1 += "\nEnter anything else to shut down."
-    except KeyError:
-        json_data["ACCOUNTS"] = []
 
-    account_choice = input(prompt1 + "\n>")
+    prompt1 = ["Enter 1 to create a new account."]
+    if json_data["ACCOUNTS"] != []:
+        prompt1.append("Enter 2 to login to an existing account.")
+    prompt1.append("Enter anything else to shut down.")
+
+    print(utils.make_box(*prompt1, form="left", title=False))
+    account_choice = input(">")
     if account_choice == "1":
         utils.clear_console()
         new_account = Account()
-        utils.dummy(new_account)
+        library.dummy(new_account)
         json_data["CURRENT"] = new_account.dict
         save()
         homepage.launch()
@@ -123,7 +122,7 @@ def login(clear=True):
 
 def match_account(clear=True):
     if clear: utils.clear_console()
-    existing_choice = input("Enter the username and password of that account.\nLeave blank to go back.\nUsername: ")
+    existing_choice = input("Username: ")
     for a in json_data["ACCOUNTS"]:
         if existing_choice == "":
             code = "CLEAR"
@@ -136,7 +135,7 @@ def match_account(clear=True):
         print("Invalid account.")
         return match_account(False)
     if code == "PASS":
-        return match_password(selected_account)
+        return match_password(selected_account, False)
     elif code == "CLEAR":
         return login()
 

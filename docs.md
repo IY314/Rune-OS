@@ -110,11 +110,14 @@ The `library` module will provide unused but useful functions for app developers
 
 #### Library Functions:
 - `tprint()` - a function that prints like a normal human being.
-- `conceal()` - a function to conceal a string using a specified letter. Ex: 12345678 -> ****5678.
-- `@repeat()` - a decorator to repeat a certain function x times.
+- `conceal()` - a function that conceals a string using a specified letter. Ex: 12345678 -> ****5678.
+- `@repeat()` - a decorator that repeats a certain function x times.
+- `dummy()` - a function that does nothing but "uses" its arguments to stop code editors from registering a problem.
+- `is_even()` - a function that determines whether a number is even.
 
 #### Utility Functions:
 - `ask()` - asks a question.
 - `y_n()` - calls `ask()` and returns a boolean value based on the answer.
 - `universal_path()` - returns the system-specific path using `os.path.join()`.
 - `clear_console()` - clears the console Rune OS is being run on.
+- `make_box()` - makes a box surrounding text.

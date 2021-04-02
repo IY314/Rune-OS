@@ -1,5 +1,13 @@
 # Rune OS ALPHA (3)
 ## Rune OS 3.7
+### Rune OS 3.7.2
+- Added a `make_box()` function to `utils` and `is_even()` to `library`
+- Moved `dummy()` to `library`
+- Implemented boxes in prompts
+- Added an `INACCESSIBLE` constant to `test` to render it inaccessible
+- All apps with the constant (set to True) will have the same effect
+- Fixed a major bug in `ask()` where `input()` was regarded as a local variable because of assignment to `getpass.getpass()`
+
 ### Rune OS 3.7.1
 - Incremented previous version to 3.7 (3.6.3 and 3.7 are the same essentially)
 - Added admin commands "create account" and "change access" to control admin access of other users
