@@ -71,30 +71,20 @@ def make_box(*strs, chars=None, form="centered", title=True):
         strs.insert(0, "\\start\\")
     if strs[-1] != "\\end\\":
         strs.append("\\end\\")
-    if form == "centered":
-        for s in range(len(strs)):
-            text = strs[s]
-            length = len(text)
-            num = int((chars - length) / 2)
-            fillchar = "-" if s == 0 or strs[s] == strs[-1] else " "
-            endchar = "+" if s == 0 or strs[s] == strs[-1] else "|"
-            if text in ("\\end\\", "\\start\\"):
-                return_str.append(endchar + (chars + 2) * fillchar + endchar)
-            else:
-                return_str.append(endchar + num * fillchar + " " + text + " " + num * fillchar + endchar)
-    elif form in ("left", "right"):
-        for s in range(len(strs)):
-            text = strs[s]
-            length = len(text)
-            num = chars - length
-            fillchar = "-" if s == 0 or strs[s] == strs[-1] else " "
-            endchar = "+" if s == 0 or strs[s] == strs[-1] else "|"
-            if text in ("\\end\\", "\\start\\"):
-                return_str.append(endchar + (chars + 2) * fillchar + endchar)
-            else:
-                if form == "left":
-                    line = endchar + " " + text + " " + num * fillchar + endchar
-                else:
-                    line = endchar + num * fillchar + " " + text + " " + endchar
-                return_str.append(line)
+    for s in range(len(strs)):
+        text = strs[s]
+        length = len(text)
+        num = int((chars - length) / 2) if form == "centered" else chars - length
+        fillchar = "-" if s == 0 or strs[s] == strs[-1] else " "
+        endchar = "+" if s == 0 or strs[s] == strs[-1] else "|"
+        if text in ("\\end\\", "\\start\\"):
+            return_str.append(endchar + (chars + 2) * fillchar + endchar)
+        else:
+            if form == "left":
+                line = endchar + " " + text + " " + num * fillchar + endchar
+            elif form == "centered":
+                line = endchar + num * fillchar + " " + text + " " + num * fillchar + endchar
+            elif form == "right":
+                line = endchar + num * fillchar + " " + text + " " + endchar
+            return_str.append(line)
     return "\n".join(return_str)
