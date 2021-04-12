@@ -1,12 +1,13 @@
 import shutil, os, importlib, sys
 sys.path.append("../")
+from system import utils
 
 def install(app_name, path="apps"):
     apps = os.listdir("installation")
     installed = os.listdir(path)
     a = 0
     while a < len(installed):
-        if installed[a] in ("__init__.py", "__pycache__", "user"):
+        if installed[a] in ("__init__.py", "__pycache__"):
             del installed[a]
         a += 1
     a = 0
@@ -28,7 +29,7 @@ def uninstall(app_name, path):
     apps = os.listdir(path)
     a = 0
     while a < len(apps):
-        if apps[a] in ("__init__.py", "__pycache__", "user"):
+        if apps[a] in ("__init__.py", "__pycache__"):
             del apps[a]
         a += 1
     del a
@@ -49,10 +50,10 @@ def uninstall(app_name, path):
 
 
 def search(app_name, user_path):
-    apps = os.listdir("apps")
+    apps = os.listdir(utils.universal_path("apps/public"))
     a = 0
     while a < len(apps):
-        if apps[a] in ("__init__.py", "__pycache__", "user"):
+        if apps[a] in ("__init__.py", "__pycache__"):
             del apps[a]
         a += 1
     user_apps = os.listdir(user_path)

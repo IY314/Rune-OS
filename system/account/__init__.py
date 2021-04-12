@@ -1,6 +1,6 @@
 import json, sys, hashlib, os, getpass
 sys.path.append("../")
-from system import homepage, utils, library
+from system import homepage, utils
 
 json_data = {}
 
@@ -97,27 +97,31 @@ class Account:
 
 
 def login(clear=True):
-    if clear: utils.clear_console()
-
-    prompt1 = ["Enter 1 to create a new account."]
-    if json_data["ACCOUNTS"] != []:
-        prompt1.append("Enter 2 to login to an existing account.")
-    prompt1.append("Enter anything else to shut down.")
-
-    print(utils.make_box(*prompt1, form="left", title=False))
-    account_choice = input(">")
-    if account_choice == "1":
+    def create_account():
         utils.clear_console()
         new_account = Account()
-        library.dummy(new_account)
+        dummy(new_account)
         json_data["CURRENT"] = new_account.dict
         save()
-        homepage.launch()
-    elif account_choice == "2" and json_data["ACCOUNTS"] != []:
+        return homepage.launch()
+
+    def login_account():
         update()
         return match_account()
+
+    if clear: utils.clear_console()
+
+    if json_data["ACCOUNTS"] == []:
+        utils.make_choice_box("Login",
+            ("create a new account", create_account),
+            anything_else=("shut down", exit), form="left"
+        )
     else:
-        exit()
+        utils.make_choice_box("Login",
+            ("create a new account", create_account),
+            ("login to an existing account", login_account),
+            anything_else=("shut down", exit), form="left"
+        )
 
 
 def match_account(clear=True):

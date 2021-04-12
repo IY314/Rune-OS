@@ -10,6 +10,8 @@ from sly import Lexer, Parser
 import sys
 sys.path.append("../")
 
+INACCESSIBLE = True
+
 
 def launch():
     lexer = CalcLexer()
@@ -53,7 +55,7 @@ class CalcLexer(Lexer):
     @_(r"\n+")
     def ignore_newline(self, t):
         self.lineno += t.value.count("\n")
-    
+
     def error(self, t):
         print(f"Line {str(self.lineno)}: Invalid character {t.value[0]}")
         self.index += 1
@@ -68,19 +70,19 @@ class CalcParser(Parser):
     @_("expr PLUS term")
     def expr(self, p):
         return p.expr + p.term
-    
+
     @_("expr MINUS term")
     def expr(self, p):
         return p.expr - p.term
-    
+
     @_("term")
     def expr(self, p):
         return p.term
-    
+
     @_("term TIMES factor")
     def term(self, p):
         return p.term * p.factor
-    
+
     @_("term DIVIDE factor")
     def term(self, p):
         if p.factor == 0:
@@ -89,23 +91,23 @@ class CalcParser(Parser):
             else:
                 return "Undefined"
         return p.term / p.factor
-    
+
     @_("factor")
     def term(self, p):
         return p.factor
-    
+
     @_("number EXP NUMBER")
     def factor(self, p):
         return p.number ** p.NUMBER
-    
+
     @_("number")
     def factor(self, p):
         return p.number
-    
+
     @_("NUMBER")
     def number(self, p):
         return p.NUMBER
-    
+
     @_("\"(\" expr \")\"")
     def number(self, p):
         return p.expr

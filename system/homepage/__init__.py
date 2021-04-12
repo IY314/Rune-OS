@@ -1,7 +1,7 @@
 import json, time, os, sys, hashlib, shutil, getpass
 sys.path.append("../")
 import apps, installation
-from system import utils, library
+from system import utils
 
 json_data = {}
 
@@ -44,58 +44,44 @@ def launch():
     return home(greeting=greeting)
 
 
-
-def home(clear=False, greeting=None):
+def home(clear=False, greeting="Home"):
     global json_data
     if clear: utils.clear_console()
-    options = [
-        "Enter 1 to run an app.",
-        "Enter 2 to install an app.",
-        "Enter 3 to uninstall an app.",
-        "Enter 4 to delete your account."
-    ]
+
     if json_data["CURRENT"]["has_admin"]:
-        options += [
-            "Enter 5 to clear all accounts.",
-            "Enter 6 to remotely create an account.",
-            "Enter 7 to promote or demote an account."
-        ]
-    options.append("Enter anything else to logout.")
-    if not greeting:
-        title = False
+        utils.make_choice_box(greeting,
+            ("run an app", run_app),
+            ("install an app", install_app),
+            ("uninstall an app", uninstall_app),
+            ("edit your account", edit_account),
+            ("delete your account", delete_account),
+            ("remotely create an account", create_account),
+            ("change an account's access", change_access),
+            ("clear all accounts", delete_all_accounts),
+            anything_else=("logout", logout), form="left"
+        )
     else:
-        options.insert(0, greeting)
-    print(utils.make_box(*options, form="left", title=title))
-    action = input(">")
-    if action == "1":
-        run_app()
-    elif action == "2":
-        install_app()
-    elif action == "3":
-        uninstall_app()
-    elif action == "4":
-        delete_account()
-    elif action == "5" and json_data["CURRENT"]["has_admin"]:
-        delete_all_accounts()
-    elif action == "6" and json_data["CURRENT"]["has_admin"]:
-        create_account()
-    elif action == "7" and json_data["CURRENT"]["has_admin"]:
-        change_access()
-    else:
-        logout()
+        utils.make_choice_box(greeting,
+            ("run an app", run_app),
+            ("install an app", install_app),
+            ("uninstall an app", uninstall_app),
+            ("edit your account", edit_account),
+            ("delete your account", delete_account),
+            anything_else=("logout", logout), form="left"
+        )
 
 
 def run_app(clear=True):
     if clear: utils.clear_console()
-    public_apps = os.listdir("apps")
+    public_apps = os.listdir(utils.universal_path("apps/public"))
     i = 0
     while i < len(public_apps):
-        if public_apps[i] in ("__init__.py", "__pycache__", "user"):
+        if public_apps[i] in ("__init__.py", "__pycache__"):
             del public_apps[i]
         i += 1
 
     del i
-    app = input("Enter the name of the app you want to run, or enter 'help' to see a list of apps.\n>")
+    app = input(utils.make_box("Run App", "Enter the name of the app you want to run, or enter 'help' to see a list of apps.", form="left") + "\n>")
     if app == "help":
         for a in os.listdir(utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")) + public_apps:
             print(a)
@@ -122,36 +108,36 @@ def delete_account():
         save()
         from system import account
         account.update()
-        account.login()
+        return account.login()
     else:
         print("Incorrect password.")
-        home()
+        return home()
 
 
 def install_app():
     utils.clear_console()
     if check_password():
-        app = input("Enter the app you want to get.\n>")
-        path = "apps"
+        app = input(utils.make_box("Install App", "Enter the app you want to get.", form="left") + "\n>")
+        path = utils.universal_path("apps/public")
         if json_data["CURRENT"]["has_admin"]:
-            public = utils.y_n("Do you want to publicly install this app?")
+            public = utils.y_n(utils.make_box("Do you want to publicly install this app?", title=False))
             if not public:
                 path = utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")
         try:
             installation.install(app, path)
-            home()
+            return home(True)
         except ModuleNotFoundError as err:
             print(err)
-            home()
+            return home()
     else:
         print("Incorrect password.")
-        home()
+        return home()
 
 
 def uninstall_app():
     utils.clear_console()
     if check_password():
-        app = input("Enter the app you want to uninstall.\n>")
+        app = input(utils.make_box("Uninstall App", "Enter the app you want to uninstall.", form="left") + "\n>")
         try:
             path = utils.universal_path(f"apps/user/{json_data['CURRENT']['username']}")
             location = installation.search(app, path)
@@ -160,15 +146,50 @@ def uninstall_app():
             else:
                 if not json_data["CURRENT"]["has_admin"]:
                     print("Access denied.")
-                    home()
-                installation.uninstall(app, "apps")
-                home()
+                    return home()
+                installation.uninstall(app, utils.universal_path("apps/public"))
+                return home(True)
         except Exception as err:
             print(err)
-            home()
+            return home()
     else:
         print("Incorrect password.")
-        home()
+        return home()
+
+
+def edit_account():
+    def username():
+        old = json_data["CURRENT"]["username"]
+        new = utils.ask("Enter the new username.", confirm=1, confirm_response="Are you sure?")
+        json_data["CURRENT"]["username"] = new
+        for a in range(len(json_data["ACCOUNTS"])):
+            if json_data["ACCOUNTS"][a]["password"] == json_data["CURRENT"]["password"]:
+                json_data["ACCOUNTS"][a]["username"] = new
+                save()
+        os.rename(utils.universal_path(f"apps/user/{old}"), utils.universal_path(f"apps/user/{new}"))
+
+    def password():
+        old = utils.ask("Enter the old password.")
+        if json_data["CURRENT"]["password"] == hashlib.sha256(old.encode("utf-8")).hexdigest():
+            new = hashlib.sha256(utils.ask("Enter the new password.", confirm=2, confirm_response="Type it again.", min_letters=8).encode("utf-8")).hexdigest()
+            json_data["CURRENT"]["password"] = new
+            for a in range(len(json_data["ACCOUNTS"])):
+                if json_data["ACCOUNTS"][a]["username"] == json_data["CURRENT"]["username"]:
+                    json_data["ACCOUNTS"][a]["password"] = new
+                    save()
+
+    utils.clear_console()
+
+    if check_password():
+        utils.make_choice_box("Edit Account",
+            ("edit your username", username),
+            ("edit your password", password),
+            anything_else=("return home", lambda: home(True)), form="left"
+        )
+        return home(True)
+    else:
+        print("Incorrect password.")
+        return home()
 
 
 def delete_all_accounts():
@@ -180,10 +201,10 @@ def delete_all_accounts():
         json_data = {"CURRENT": None, "ACCOUNTS": []}
         save()
         from system import account
-        account.login()
+        return account.login()
     else:
         print("Incorrect password.")
-        home()
+        return home()
 
 
 def create_account():
@@ -193,53 +214,58 @@ def create_account():
         from system import account
         utils.clear_console()
         new_account = account.Account(has_admin=has_admin)
-        library.dummy(new_account)
+        utils.dummy(new_account)
         json_data["CURRENT"] = new_account.dict
         save()
-        launch()
+        return launch()
 
 
 def change_access():
+    def promote():
+        user = input("Which user do you want to promote?\n>")
+        for u in json_data["ACCOUNTS"]:
+            if u["username"] == user:
+                user = u
+                break
+        else:
+            print("Invalid user.")
+            return home()
+        if user["has_admin"]:
+            print("That user already has admin access.")
+            return home()
+        user["has_admin"] = True
+        save()
+
+    def demote():
+        user = input("Which user do you want to demote?\n>")
+        for u in json_data["ACCOUNTS"]:
+            if u["username"] == user:
+                user = u
+                break
+        else:
+            print("Invalid user.")
+            return home()
+        if not user["has_admin"]:
+            print("That user does not have admin access.")
+            return home()
+        user["has_admin"] = False
+        save()
+        return home(True)
+
     utils.clear_console()
     if check_password():
-        print("Enter 1 to promote an account.\nEnter 2 to demote an account.\nEnter anything else to return home.")
-        level = input(">")
-        if level == "1":
-            user = input("Which user do you want to promote?\n>")
-            for u in json_data["ACCOUNTS"]:
-                if u["username"] == user:
-                    user = u
-                    break
-            else:
-                print("Invalid user.")
-                return home()
-            if user["has_admin"]:
-                print("That user already has admin access.")
-                return home()
-            user["has_admin"] = True
-            save()
-            return home(True)
-        elif level == "2":
-            user = input("Which user do you want to demote?\n>")
-            for u in json_data["ACCOUNTS"]:
-                if u["username"] == user:
-                    user = u
-                    break
-            else:
-                print("Invalid user.")
-                return home()
-            if not user["has_admin"]:
-                print("That user does not have admin access.")
-                return home()
-            user["has_admin"] = False
-            save()
-            return home(True)
-        else:
-            home(True)
+        utils.make_choice_box("Change Access",
+            ("promote an account", promote),
+            ("demote an account", demote),
+            anything_else=("return home", lambda: home(True)), form="left"
+        )
+    else:
+        print("Incorrect password.")
+        return home()
 
 
 def logout():
     json_data["CURRENT"] = None
     save()
     from system import account
-    account.login()
+    return account.login()

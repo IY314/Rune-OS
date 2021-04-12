@@ -1,4 +1,16 @@
 # Rune OS ALPHA (3)
+## Rune OS 3.8
+### Rune OS 3.8
+- Added a `make_choice_box()` function to `utils` to automate making choice boxes
+- Implemented choice boxes in prompts
+- Added new action "edit account" to change username and password
+- Removed `library` module and moved all code to `utils`
+- Removed `test` module and `testing` directory
+- Removed `apps` from `.gitignore`
+- Added a new directory `public` to replace the general `apps` folder
+- Made `calc` inaccessible and moved it to `public`
+- Made all files point to `public` instead of `apps`
+
 ## Rune OS 3.7
 ### Rune OS 3.7.2
 - Added a `make_box()` function to `utils` and `is_even()` to `library`

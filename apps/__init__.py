@@ -15,5 +15,5 @@ def run(app_name):
         app = importlib.import_module(f"apps.user.{json_data['CURRENT']['username']}.{app_name}")
         app.launch()
     except ModuleNotFoundError:
-        app = importlib.import_module(f"apps.{app_name}")
+        app = importlib.import_module(f"apps.public.{app_name}")
         app.launch()

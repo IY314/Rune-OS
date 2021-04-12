@@ -1,4 +1,4 @@
-# Rune OS ALPHA Documentation
+# Rune OS 3 Documentation
 WIP
 (for now just look at `changelog.md`)
 
@@ -101,23 +101,3 @@ Let's dissect it line by line.
 8. `homepage.launch()` redirects back to the homepage.
 9. `execute_some_code()` is a separate function that is called when `action` is 1.
 10. `print("Hello World")` demonstrates that the app worked; which is the only real output that it gives.
-
-### Testing an App
-The `test` module will help you sniff out bugs in your app. Place your app into the `testing` folder and then run the `test` app.
-
-### Using library functions
-The `library` module will provide unused but useful functions for app developers. To use other functions such as `y_n()` and `ask()`, use `utils`. For a more in-depth description, look at the functions' `__doc__`s.
-
-#### Library Functions:
-- `tprint()` - a function that prints like a normal human being.
-- `conceal()` - a function that conceals a string using a specified letter. Ex: 12345678 -> ****5678.
-- `@repeat()` - a decorator that repeats a certain function x times.
-- `dummy()` - a function that does nothing but "uses" its arguments to stop code editors from registering a problem.
-- `is_even()` - a function that determines whether a number is even.
-
-#### Utility Functions:
-- `ask()` - asks a question.
-- `y_n()` - calls `ask()` and returns a boolean value based on the answer.
-- `universal_path()` - returns the system-specific path using `os.path.join()`.
-- `clear_console()` - clears the console Rune OS is being run on.
-- `make_box()` - makes a box surrounding text.
