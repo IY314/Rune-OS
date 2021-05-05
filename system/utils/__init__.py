@@ -1,4 +1,12 @@
-import os, time, sys, getpass, builtins, re, _io
+import os
+import time
+import sys
+
+import getpass
+import builtins
+import re
+import _io
+import json
 
 DEFAULT_DELAYS = {
     r"\n": 0.5,
@@ -7,8 +15,11 @@ DEFAULT_DELAYS = {
 }
 
 
+class ProgrammerError(Exception):
+    pass
+
+
 def ask(question, *, confirm=0, confirm_response=None, accepted_responses=None, error_message="Invalid answer.", min_letters=4):
-    """Asks a question specified by the user."""
     if any((confirm, confirm_response)) and not all((confirm, confirm_response)):
         if not confirm_response:
             raise TypeError(f"Argument confirm is {str(confirm)}, but there is no value set for confirm_response!")
@@ -42,7 +53,6 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=None, 
 
 
 def y_n(message, *, error_message="Invalid answer.", yes=("y", "yes", "aye", "yea"),  no=("n", "no", "nope")):
-    """Translates user input into a boolean value (asks yes or no)"""
     clear_console()
     while True:
         ans = input(message + "\n>")
@@ -55,18 +65,33 @@ def y_n(message, *, error_message="Invalid answer.", yes=("y", "yes", "aye", "ye
             print(error_message)
 
 
-def universal_path(path: str):
-    """Takes a forward-slash-based path and adjusts it to a Windows path if needed."""
-    return os.path.join(*path.split("/"))
+class Path:
+    def __init__(self, path=None):
+        if path:
+            self.path = self.universal_path(path)
+
+    def universal_path(self, path=None):
+        if not path:
+            path = self.path
+        return os.path.join(*path.split("/"))
+
+    def import_path(self, path=None):
+        if not path:
+            path = self.path
+        return ".".join(path.split(os.path.sep))
+
+    def update_path(self, path):
+        self.path = self.universal_path(path)
+
+    def copy(self):
+        return Path(self.path)
 
 
 def clear_console():
-    """Clears the console."""
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def make_box(*strs, chars=None, form="centered", title=True):
-    """Makes a box."""
     return_str = []
     strs = list(strs)
     if not chars:
@@ -100,15 +125,24 @@ def make_box(*strs, chars=None, form="centered", title=True):
     return "\n".join(return_str)
 
 
-def make_choice_box(header=None, *options, anything_else, **box_options):
-    """Makes a choice box."""
+def make_choice_box(header=None, *options, anything_else, condition, **box_options):
+    data = File("system/accounts.json")
+
     choices = []
     title = False
     if header:
         choices.append(header)
         title = True
     for o in range(len(options)):
-        choices.append(f"Enter {str(o + 1)} to {options[o][0]}.")
+        try:
+            data.update()
+            if options[o][2]:
+                if condition:
+                    raise IndexError()
+            else:
+                continue
+        except IndexError:
+            choices.append(f"Enter {str(o + 1)} to {options[o][0]}.")
     choices.append(f"Enter anything else to {anything_else[0]}.")
     print(make_box(*choices, **box_options, title=title))
     i = input(">")
@@ -169,3 +203,18 @@ def is_even(num):
         return True
     else:
         return False
+
+
+class File:
+    def __init__(self, filename):
+        self.filename = Path(filename)
+        self.data = None
+        self.update()
+
+    def save(self):
+        with open(self.filename.path, "w") as f:
+            f.write(json.dumps(self.data))
+
+    def update(self):
+        with open(self.filename.path) as f:
+            self.data = json.loads(f.read())

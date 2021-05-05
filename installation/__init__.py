@@ -1,5 +1,11 @@
-import shutil, os, importlib, sys
+import os
+import sys
+import shutil
+
+import importlib
+
 sys.path.append("../")
+
 from system import utils
 
 def install(app_name, path="apps"):
@@ -26,23 +32,23 @@ def install(app_name, path="apps"):
 
 
 def uninstall(app_name, path):
-    apps = os.listdir(path)
-    a = 0
-    while a < len(apps):
-        if apps[a] in ("__init__.py", "__pycache__"):
-            del apps[a]
-        a += 1
-    del a
-    for a in apps:
-        if app_name == a:
+    apps = os.listdir(path.path)
+    b = 0
+    while b < len(apps):
+        if apps[b] in ("__init__.py", "__pycache__"):
+            del apps[b]
+        b += 1
+    del b
+    for b in apps:
+        if app_name == b:
             try:
-                module = importlib.import_module(f".{app_name}", path)
+                print(path.import_path(), app_name)
+                module = importlib.import_module(f".{app_name}", path.import_path())
                 if module.INACCESSIBLE:
                     raise ImportError("App inaccessible.")
             except AttributeError:
                 pass
-            # shutil.rmtree(os.path.join(path, app_name))
-            print(os.path.join(path, app_name))
+            shutil.rmtree(os.path.join(path.path, app_name))
             break
 
     else:
@@ -50,13 +56,13 @@ def uninstall(app_name, path):
 
 
 def search(app_name, user_path):
-    apps = os.listdir(utils.universal_path("apps/public"))
+    apps = os.listdir(utils.Path().universal_path("apps/public"))
     a = 0
     while a < len(apps):
         if apps[a] in ("__init__.py", "__pycache__"):
             del apps[a]
         a += 1
-    user_apps = os.listdir(user_path)
+    user_apps = os.listdir(user_path.path)
     a = 0
     while a < len(user_apps):
         if user_apps[a] in ("__init__.py", "__pycache__"):

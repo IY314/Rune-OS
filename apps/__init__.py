@@ -1,18 +1,19 @@
-import importlib, os, json
+import os
+import sys
 
-json_data = {}
+import importlib
 
+sys.path.append("../")
 
-def update():
-    global json_data
-    with open("system/info.json") as f:
-        json_data = json.loads(f.read())
+from system import utils
+
+data = utils.File("system/accounts.json")
 
 
 def run(app_name):
-    update()
+    data.update()
     try:
-        app = importlib.import_module(f"apps.user.{json_data['CURRENT']['username']}.{app_name}")
+        app = importlib.import_module(f"apps.private.{data.data['CURRENT']['username']}.{app_name}")
         app.launch()
     except ModuleNotFoundError:
         app = importlib.import_module(f"apps.public.{app_name}")

@@ -1,6 +1,4 @@
 .DS_STORE
 __pycache__
-info.json
-user
-testing
-installation
+accounts.json
+public

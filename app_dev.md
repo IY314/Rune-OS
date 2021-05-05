@@ -1,10 +1,7 @@
-# Rune OS 3 Documentation
+# Building an App
 WIP
-(for now just look at `changelog.md`)
 
-## App Development
-### Building an App
-Your app must be in the `installation` package/folder. If you put it in `apps`, it will very likely be deleted and your app will be gone.
+Your app must be in the `installation` package/folder. If you put it in `public`, it will very likely be deleted and your app will be gone.
 
 Apps are Python packages (the format is explained below).
 

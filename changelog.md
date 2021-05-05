@@ -1,4 +1,21 @@
 # Rune OS ALPHA (3)
+## Rune OS 3.9
+### Rune OS 3.9
+So Many Features Update
+
+- Added `save()` and `update()` functions to `utils` due to repeating code in files
+- Added `ProgrammerError` class to `utils` in place of Python built-in errors
+- Added `Path` class to include different path methods such as `universal_path()`
+- Added `File` class to encompass different file-managing methods
+- Fixed a long-running bug with `y_n()`
+- Renamed `info.json` to `accounts.json` (more fitting for its purpose)
+- Removed `testing`, `installation`, `info.json`, and `user` from `.gitignore`
+- Added `public` and `accounts.json` to `.gitignore`
+- Renamed `docs.md` to `app_dev.md`
+- Renamed `user` to `private`
+- Made all files point to `private` instead of `apps`
+- Fixed `uninstall` (I think it's been bugged since it's been added)
+
 ## Rune OS 3.8
 ### Rune OS 3.8
 - Added a `make_choice_box()` function to `utils` to automate making choice boxes

@@ -1,11 +1,14 @@
 """
 The Calculator (uses Sly Lex Yacc)
 - has full order of operations
-- supports +, -, *, /, and ^
+- supports +, -, *, /, ^, and ()
 - Special Commands:
     help - Shows this menu
     exit - Exits this app
 """
+# The following part is for PyLint warnings
+# pylint: disable=undefined-variable, function-redefined
+
 from sly import Lexer, Parser
 import sys
 sys.path.append("../")
