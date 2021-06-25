@@ -1,17 +1,17 @@
-"""
+'''
 The Calculator (uses Sly Lex Yacc)
 - has full order of operations
 - supports +, -, *, /, ^, and ()
 - Special Commands:
     help - Shows this menu
     exit - Exits this app
-"""
+'''
 # The following part is for PyLint warnings
 # pylint: disable=undefined-variable, function-redefined
 
 from sly import Lexer, Parser
 import sys
-sys.path.append("../")
+sys.path.append('../')
 
 INACCESSIBLE = True
 
@@ -21,10 +21,10 @@ def launch():
     parser = CalcParser()
 
     while True:
-        text = input("calc >")
-        if text == "help":
+        text = input('calc >')
+        if text == 'help':
             print(__doc__)
-        elif text == "exit":
+        elif text == 'exit':
             from system import homepage
             return homepage.launch()
         else:
@@ -34,19 +34,19 @@ def launch():
 
 
 class CalcLexer(Lexer):
-    tokens = { "NUMBER", "PLUS", "MINUS", "TIMES", "DIVIDE", "EXP" }
+    tokens = { 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EXP' }
 
-    literals = { "(", ")" }
+    literals = { '(', ')' }
 
-    ignore = " \t"
+    ignore = ' \t'
 
-    PLUS = r"\+"
-    MINUS = r"-"
-    TIMES = r"\*"
-    DIVIDE = r"/"
-    EXP = r"\^"
+    PLUS = r'\+'
+    MINUS = r'-'
+    TIMES = r'\*'
+    DIVIDE = r'/'
+    EXP = r'\^'
 
-    @_(r"\d+(\.\d+)?")
+    @_(r'\d+(\.\d+)?')
     def NUMBER(self, t):
         int_value = int(t.value)
         if int_value != t.value:
@@ -55,12 +55,12 @@ class CalcLexer(Lexer):
             t.value = int_value
         return t
 
-    @_(r"\n+")
+    @_(r'\n+')
     def ignore_newline(self, t):
-        self.lineno += t.value.count("\n")
+        self.lineno += t.value.count('\n')
 
     def error(self, t):
-        print(f"Line {str(self.lineno)}: Invalid character {t.value[0]}")
+        print(f'Line {str(self.lineno)}: Invalid character {t.value[0]}')
         self.index += 1
 
 
@@ -68,49 +68,50 @@ class CalcParser(Parser):
     tokens = CalcLexer.tokens
 
     def error(self, token):
-        print("Invalid syntax")
+        print('Invalid syntax')
 
-    @_("expr PLUS term")
+    @_('expr PLUS term')
     def expr(self, p):
         return p.expr + p.term
 
-    @_("expr MINUS term")
+    @_('expr MINUS term')
     def expr(self, p):
         return p.expr - p.term
 
-    @_("term")
+    @_('term')
     def expr(self, p):
         return p.term
 
-    @_("term TIMES factor")
+    @_('term TIMES factor')
     def term(self, p):
         return p.term * p.factor
 
-    @_("term DIVIDE factor")
+    @_('term DIVIDE factor')
     def term(self, p):
         if p.factor == 0:
             if p.term != 0:
-                return "Infinity"
+                return 'Infinity'
             else:
-                return "Undefined"
+                return 'Undefined'
         return p.term / p.factor
 
-    @_("factor")
+    @_('factor')
     def term(self, p):
         return p.factor
 
-    @_("number EXP NUMBER")
+    @_('number EXP NUMBER')
     def factor(self, p):
         return p.number ** p.NUMBER
 
-    @_("number")
+    @_('number')
     def factor(self, p):
         return p.number
 
-    @_("NUMBER")
+    @_('NUMBER')
     def number(self, p):
         return p.NUMBER
 
-    @_("\"(\" expr \")\"")
+    @_('\'(\' expr \')\'')
     def number(self, p):
         return p.expr
+

@@ -15,10 +15,10 @@ This OS can:
 
 * manage accounts with passwords
 * manage admin access
-* support apps* with creation, installation, and testing
+* support apps\* with creation, installation, and testing
 
 All capabilities are in `docs.md`.
 
 ## Appendix
 
-*See `docs.md` for app-development information and acceptable format
+\*See `docs.md` for app-development information and acceptable format
