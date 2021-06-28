@@ -1,16 +1,11 @@
 import sys
 import os
 import shutil
-
 import time
 import getpass
 import hashlib
-
-sys.path.append('../')
-
 import apps
 import installation
-
 from system import utils
 
 data = utils.File('system/accounts.json')
@@ -65,7 +60,7 @@ def home(clear=False, greeting='Home'):
         ('remotely create an account', create_account, True),
         ('change an account\'s access', change_access, True),
         ('clear all accounts', delete_all_accounts, True),
-        anything_else=('logout', logout), condition=data.data['CURRENT']['has_admin'], form='left'
+        anything_else=('logout', logout), condition=data.data['CURRENT']['has_admin']
     )
 
 
@@ -84,7 +79,7 @@ def run_app(clear=True):
             del private_apps[i]
         i += 1
     del i
-    app = input(utils.make_box('Run App', 'Enter the name of the app you want to run, or enter \'help\' to see a list of apps.', form='left') + '\n>')
+    app = input(utils.make_box('Run App', 'Enter the name of the app you want to run, or enter \'help\' to see a list of apps.') + '\n>')
     if app == 'help':
         for a in private_apps + public_apps:
             print(a)
@@ -123,7 +118,7 @@ def uninstall_app():
 
 @check_password()
 def app(type_):
-    app = input(utils.make_box(f'{type_} App', f'Enter the app you want to {type_.lower()}.', form='left') + '\n>')
+    app = input(utils.make_box(f'{type_} App', f'Enter the app you want to {type_.lower()}.') + '\n>')
     if app == '':
         return home(True)
     try:
@@ -178,7 +173,7 @@ def edit_account():
     utils.make_choice_box('Edit Account',
         ('edit your username', username),
         ('edit your password', password),
-        anything_else=('return home', lambda: home(True)), form='left'
+        anything_else=('return home', lambda: home(True))
     )
     return home(True)
 
@@ -208,7 +203,6 @@ def create_account():
 
 @check_password()
 def change_access():
-
     action = None
 
     def promote():
@@ -228,7 +222,7 @@ def change_access():
     utils.make_choice_box('Change Access',
         ('promote an account', promote),
         ('demote an account', demote),
-        anything_else=('return home', go_home), form='left'
+        anything_else=('return home', go_home)
     )
 
     user = input(utils.make_box('Which user do you want to promote?', title=False) + '\n>')

@@ -1,11 +1,7 @@
 import os
 import sys
 import shutil
-
 import importlib
-
-sys.path.append('../')
-
 from system import utils
 
 def install(app_name, path='apps'):

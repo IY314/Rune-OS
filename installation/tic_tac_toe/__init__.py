@@ -72,6 +72,7 @@ def main():
 
         if not grid.add_item(symbol, index):
             print('That index is already taken!')
+            continue
 
         symbol = 'O' if symbol == 'X' else 'X'
     print(grid.get_formatted_grid())
@@ -83,5 +84,5 @@ def main():
 
 def launch():
     while True:
-        utils.make_choice_box('Tic Tac Toe', ('play tic tac toe', main), anything_else=('quit', homepage.home), form='left')
+        utils.make_choice_box('Tic Tac Toe', ('play tic tac toe', main), anything_else=('quit', homepage.home))
 

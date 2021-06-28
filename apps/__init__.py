@@ -1,10 +1,6 @@
 import os
 import sys
-
 import importlib
-
-sys.path.append('../')
-
 from system import utils
 
 data = utils.File('system/accounts.json')

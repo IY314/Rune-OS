@@ -1,11 +1,11 @@
 import os
+import subprocess
 import time
 import sys
-
 import getpass
 import builtins
 import re
-import _io
+import io
 import json
 
 DEFAULT_DELAYS = {
@@ -21,7 +21,7 @@ class ProgrammerError(Exception):
 
 def ask(question, *, confirm=0, confirm_response=None, accepted_responses=None, error_message='Invalid answer.', min_letters=4):
     if any((confirm, confirm_response)) and not all((confirm, confirm_response)):
-        if not confirm_response:
+        if confirm_response is None:
             raise TypeError(f'Argument confirm is {str(confirm)}, but there is no value set for confirm_response!')
         else:
             raise TypeError('Argument confirm is 0, but there is a value set for confirm_response!')
@@ -52,7 +52,7 @@ def ask(question, *, confirm=0, confirm_response=None, accepted_responses=None, 
         return ans
 
 
-def y_n(message, *, error_message='Invalid answer.', yes=('y', 'yes', 'aye', 'yea'),  no=('n', 'no', 'nope')):
+def y_n(message, *, error_message='Invalid answer.', yes={ 'y', 'yes', 'aye', 'yea' },  no={ 'n', 'no', 'nay', 'nope' }):
     clear_console()
     while True:
         ans = input(message + '\n>')
@@ -67,16 +67,16 @@ def y_n(message, *, error_message='Invalid answer.', yes=('y', 'yes', 'aye', 'ye
 
 class Path:
     def __init__(self, path=None):
-        if path:
+        if path is not None:
             self.path = self.universal_path(path)
 
     def universal_path(self, path=None):
-        if not path:
+        if path is None:
             path = self.path
         return os.path.join(*path.split('/'))
 
     def import_path(self, path=None):
-        if not path:
+        if path is None:
             path = self.path
         return '.'.join(path.split(os.path.sep))
 
@@ -88,13 +88,13 @@ class Path:
 
 
 def clear_console():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    subprocess.run('cls' if os.name == 'nt' else 'clear')
 
 
-def make_box(*strs, chars=None, form='centered', title=True):
+def make_box(*strs, chars=None, form='left', title=True):
     return_str = []
     strs = list(strs)
-    if not chars:
+    if chars is None:
         record = len(strs[0])
         for s in range(len(strs)):
             if is_even(len(strs[s])):
@@ -102,7 +102,7 @@ def make_box(*strs, chars=None, form='centered', title=True):
             if len(strs[s]) > record:
                 record = len(strs[s])
         chars = record
-    if not title:
+    if title is None:
         strs.insert(0, '\\start\\')
     if strs[-1] != '\\end\\':
         strs.append('\\end\\')
@@ -130,7 +130,7 @@ def make_choice_box(header=None, *options, anything_else, condition=True, **box_
 
     choices = []
     title = False
-    if header:
+    if header is not None:
         choices.append(header)
         title = True
     for o in range(len(options)):
@@ -157,7 +157,7 @@ def make_choice_box(header=None, *options, anything_else, condition=True, **box_
 
 
 def tprint(*vals, sep=' ', end='\n', file=sys.stdout, delays=DEFAULT_DELAYS):
-    if type(file) == _io.TextIOWrapper:
+    if type(file) == io.TextIOWrapper:
         print(*vals, sep=sep, end=end, file=file)
         return
     string = sep.join([str(val) for val in vals]) + end
@@ -199,11 +199,7 @@ def dummy(*args, **kw):
 def is_even(num):
     raw = num / 2
     as_int = int(num / 2)
-    if as_int == raw:
-        return True
-    else:
-        return False
-
+    return as_int == raw
 
 class File:
     def __init__(self, filename):

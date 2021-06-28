@@ -1,26 +1,22 @@
 import sys
 import os
-
 import hashlib
 import getpass
 import json
-
-sys.path.append('../')
-
 from system import utils
 
 
 class JSONFile(utils.File):
-    DEFAULT_JSON_DATA = {'CURRENT': None, 'ACCOUNTS': []}
 
     def update(self):
+        DEFAULT_JSON_DATA = {'CURRENT': None, 'ACCOUNTS': []}
         try:
             with open(self.filename.path) as f:
                 self.data = json.loads(f.read())
         except FileNotFoundError:
             with open(self.filename.path, 'w+') as f:
-                f.write(json.dumps(self.DEFAULT_JSON_DATA))
-                self.data = self.DEFAULT_JSON_DATA
+                f.write(json.dumps(DEFAULT_JSON_DATA))
+                self.data = DEFAULT_JSON_DATA
 
         del f
 
@@ -29,23 +25,21 @@ data = JSONFile('system/accounts.json')
 
 
 class Account:
-    params = ('username', 'password', 'has_admin')
+    params = { 'username', 'password', 'has_admin' }
 
-    def __init__(self, **kw):
-        for k in kw:
-            if k in self.params:
-                setattr(self, k, kw[k])
-            else:
-                raise utils.ProgrammerError(f'Invalid param \'{k}\'')
-
+    def __init__(self, *, username=None, password=None):
         unidentified = []
-        for field in self.params:
-            try:
-                utils.dummy(getattr(self, field))
-            except AttributeError:
-                unidentified.append(field)
 
-        self.get_info(*unidentified)
+        if username is not None:
+            self.username = username
+        else:
+            unidentified.append('username')
+        if password is not None:
+            self.password = password
+        else:
+            unidentified.append('password')
+
+        self.get_info(*unidentified, 'has_admin')
         self.dict = {
             'username': self.username,
             'password': self.password,
@@ -103,11 +97,11 @@ def login(clear=True):
 
     def match_account(clear=True):
         if clear: utils.clear_console()
-        existing_choice = input('Username: ')
+        username = input('Username: ')
         for a in data.data['ACCOUNTS']:
-            if existing_choice == '':
+            if username == '':
                 return login()
-            if existing_choice == a['username']:
+            if username == a['username']:
                 selected_account = a
                 return match_password(selected_account, False)
         else:
@@ -116,9 +110,9 @@ def login(clear=True):
 
     def match_password(selected_account, clear=True):
         if clear: utils.clear_console()
-        password_choice = getpass.getpass('Password: ')
-        hashed = hashlib.sha256(password_choice.encode('utf-8')).hexdigest()
-        if password_choice == '':
+        password = getpass.getpass('Password: ')
+        hashed = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        if password == '':
             return match_account()
         elif hashed != selected_account['password']:
             print('Incorrect password.')
@@ -134,5 +128,5 @@ def login(clear=True):
     utils.make_choice_box('Login',
         ('create a new account', create_account),
         ('login to an existing account', login_account, True),
-        anything_else=('shut down', exit), condition=data.data['ACCOUNTS'] != [], form='left'
+        anything_else=('shut down', exit), condition=data.data['ACCOUNTS'] != []
     )

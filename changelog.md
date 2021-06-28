@@ -1,10 +1,15 @@
 # Rune OS ALPHA (3)
 ## Rune OS 3.8
+### Rune OS 3.8.2
+Refactor Update Part Two
+* Fixed bug in tic tac toe
+
 ### Rune OS 3.8.1
 Refactor Update
 * Refactored entire project(replaced double quotes with single)
 * Added tic tac toe to available default apps
 * Changed `condition` argument in `make_choice_box()` to a default one
+* Apparently I made `form=left` default a while ago but I forgot to change all the calls to `make_box()`
 
 ### Rune OS 3.8
 So Many Features Update

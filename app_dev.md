@@ -11,7 +11,15 @@ Rune OS
 |
 +-- apps
     |
-    +-- user
+    +-- private
+        |
+        +-- __init__.py
+    |
+    +-- public
+        |
+        +-- calc
+            |
+            +-- __init__.py
         |
         +-- __init__.py
     |
@@ -19,11 +27,11 @@ Rune OS
 |
 +-- installation
     |
-    +-- calc
+    +-- GTN
         |
         +-- __init__.py
     |
-    +-- GTN
+    +-- tic_tac_toe
         |
         +-- __init__.py
     |
@@ -43,15 +51,11 @@ Rune OS
         |
         +-- __init__.py
     |
-    +-- library
-        |
-        +-- __init__.py
-    |
     +-- utils
         |
         +-- __init__.py
     |
-    +-- info.json
+    +-- accounts.json
 |
 +-- .gitattributes
 |
@@ -59,7 +63,7 @@ Rune OS
 |
 +-- changelog.md
 |
-+-- docs.md
++-- app_dev.md
 |
 +-- main.py
 |
@@ -72,15 +76,16 @@ All apps must be built using Python 3 code. Here is an example of an app:
 #! python3
 # example/__init__.py
 
+from system import utils
+from system import homepage
+
+
 def launch():
     while True:
-        action = input("Enter 1 to run code.\nEnter anything else to exit.\n>")
-        if action == "1":
-            execute_some_code()
-        else:
-            from system import homepage
-            homepage.launch()
-
+        utils.make_choice_box('Example',
+            ('run code', execute_some_code),
+            anything_else=('quit', homepage.launch)
+        )
 
 def execute_some_code():
     print("Hello World")
@@ -88,13 +93,9 @@ def execute_some_code():
 
 Let's dissect it line by line.
 
-1. `launch()` is required for every app. This is executed whenever the app is launched, hence the name.
-2. `while True` ensures that your app will be able to run multiple times in one session (a session is a complete run of the app).
-3. `action` takes the user input to decide the next action. This is not required by highly recommended.
-4. `if action == "1"` determines if the option inputted in `action` is 1. Be sure to make it into a `str`, or else your app will not function!
-5. `execute_some_code()` is not required. It demonstrates that you can have freedom with your app with custom functions, classes, methods, and whatnot.
-6. `else` handles the "Enter anything else to exit."
-7. `from system import homepage` imports the homepage so your app can return to it.
-8. `homepage.launch()` redirects back to the homepage.
-9. `execute_some_code()` is a separate function that is called when `action` is 1.
-10. `print("Hello World")` demonstrates that the app worked; which is the only real output that it gives.
+1. `from system import utils` and `from system import homepage` import the required modules for this app to function.
+2. `launch()` is required for each app. It is like the `main()` function in other languages, the one that will be run.
+3. `while True` allows this app to run multiple times.
+4. `utils.make_choice_box()` is a function in the `utils` module that provides a fancy choice box at one's convenience. The arguments are:
+5. `execute_some_code()` prints "Hello World".
+
