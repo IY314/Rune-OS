@@ -46,8 +46,8 @@ class Account:
             'has_admin': self.has_admin
         }
         data.data['ACCOUNTS'].append(self.dict)
-        os.makedirs(utils.Path().universal_path(f'apps/private/{self.username}'))
-        with open(utils.Path().universal_path(f'apps/private/{self.username}/__init__.py'), 'w+'):
+        os.makedirs(utils.Path.universal_path(f'apps/private/{self.username}'))
+        with open(utils.Path.universal_path(f'apps/private/{self.username}/__init__.py'), 'w+'):
             pass
         data.save()
 

@@ -158,7 +158,7 @@ def edit_account():
                 data.data['ACCOUNTS'][a]['username'] = new
                 data.save()
         private_path.update_path(f'apps/private/{new}')
-        os.rename(utils.Path().universal_path(f'apps/private/{old}'), utils.Path().universal_path(f'apps/private/{new}'))
+        os.rename(utils.Path.universal_path(f'apps/private/{old}'), utils.Path.universal_path(f'apps/private/{new}'))
 
     def password():
         old = getpass.getpass('Enter the old password.\n>')
@@ -181,7 +181,7 @@ def edit_account():
 @check_password()
 def delete_all_accounts():
     for a in data.data['ACCOUNTS']:
-        shutil.rmtree(utils.Path().universal_path(f'apps/private/{a["username"]}'))
+        shutil.rmtree(utils.Path.universal_path(f'apps/private/{a["username"]}'))
     data.data = {'CURRENT': None, 'ACCOUNTS': []}
     data.save()
     from system import account

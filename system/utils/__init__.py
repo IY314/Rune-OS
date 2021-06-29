@@ -70,9 +70,8 @@ class Path:
         if path is not None:
             self.path = self.universal_path(path)
 
-    def universal_path(self, path=None):
-        if path is None:
-            path = self.path
+    @staticmethod
+    def universal_path(cls, path):
         return os.path.join(*path.split('/'))
 
     def import_path(self, path=None):

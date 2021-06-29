@@ -52,7 +52,7 @@ def uninstall(app_name, path):
 
 
 def search(app_name, user_path):
-    apps = os.listdir(utils.Path().universal_path('apps/public'))
+    apps = os.listdir(utils.Path.universal_path('apps/public'))
     a = 0
     while a < len(apps):
         if apps[a] in ('__init__.py', '__pycache__'):
