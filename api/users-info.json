@@ -1,0 +1,14 @@
+{
+    "users": [
+        {
+            "username": "isaacyee",
+            "password": 5077959367253371379,
+            "access_level": 2
+        }
+    ],
+    "current_user": {
+        "username": "isaacyee",
+        "password": 5077959367253371379,
+        "access_level": 2
+    }
+}
