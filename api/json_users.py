@@ -1,24 +1,23 @@
 import json
-from typing import Any, Dict
+from dataclasses import dataclass
 
 
-class JSONFile(object):
+@dataclass
+class JSONFile:
+    filename: str
 
-    def __init__(self, filename: str) -> None:
-        self.filename: str = filename
-    
-    def get(self) -> Dict[str, Any]:
+    def get(self):
         with open(self.filename) as f:
             return json.loads(f.read())
-    
-    def replace(self, obj: Dict[str, Any]) -> None:
+
+    def replace(self, obj):
         with open(self.filename, 'w') as f:
             f.write(json.dumps(obj, indent=4))
-    
-    def get_key(self, key: str) -> Any:
+
+    def get_key(self, key):
         return self.get().get(key)
-    
-    def modify(self, key: str, value: Any) -> None:
+
+    def modify(self, key, value):
         data = self.get()
         data[key] = value
         self.replace(data)

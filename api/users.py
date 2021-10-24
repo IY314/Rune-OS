@@ -1,4 +1,6 @@
-from typing import Any, Callable, Dict, List
+import hashlib
+from dataclasses import dataclass
+from typing import ClassVar
 from api.json_users import JSONFile
 
 
@@ -9,21 +11,23 @@ def check_special_char(string: str) -> bool:
     return False
 
 
-class User(object):
+@dataclass
+class User:
+    json_file: ClassVar = JSONFile('./api/users-info.json')
+    users: ClassVar = []
+    users_json: ClassVar = []
 
-    json_file: JSONFile = JSONFile('./api/users-info.json')
-    users: List = []
-    users_json: List[Dict[str, Any]] = []
+    username: str
+    password: str
+    access_level: int = 0
 
-    def __init__(self, username: str, password: str, access_level: int = 0) -> None:
-        self.username = username
-        self.password = hash(password)
-        self.access_level = access_level
+    def __post_init__(self):
+        self.password = hashlib.sha256(self.password.encode('utf-8')).hexdigest()
         self.users.append(self)
         self.users_json.append(self.to_JSON())
         self.json_file.modify('users', self.users_json)
 
-    def to_JSON(self) -> Dict[str, Any]:
+    def to_JSON(self):
         return {
             'username': self.username,
             'password': self.password,
@@ -31,7 +35,7 @@ class User(object):
         }
 
     @classmethod
-    def get_info(cls, get_data: Callable, send_data: Callable):
+    def get_info(cls, get_data, send_data):
         while True:
             data = get_data('username')
             if len(data) < 4:
@@ -53,9 +57,9 @@ class User(object):
         access_level = 2 if not cls.users else 0
 
         return User(username, password, access_level)
-    
+
     @classmethod
-    def login(cls, get_data: Callable, send_data: Callable) -> None:
+    def login(cls, get_data, send_data):
         found_user = None
         while True:
             data = get_data('try_username')
@@ -71,14 +75,14 @@ class User(object):
             data = get_data('try_password')
             if data is None:
                 return cls.login(get_data, send_data)
-            elif hash(data) != found_user.password:
+            elif hashlib.sha256(data.encode('utf-8')).hexdigest() != found_user.password:
                 send_data('failure_p1')
             else:
                 cls.json_file.modify('current_user', found_user.to_JSON())
                 break
-    
+
     @classmethod
-    def change_level(cls, user: Dict[str, Any], level: int = 1) -> None:
+    def change_level(cls, user, level=1):
         if user not in cls.users_json:
             return
         for u in cls.users:

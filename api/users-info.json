@@ -2,13 +2,13 @@
     "users": [
         {
             "username": "isaacyee",
-            "password": 5077959367253371379,
+            "password": "af279d1c700abd9701eb18c477f7ef58c1fa3eca3dc50b42a1acd6ac51a5df6a",
             "access_level": 2
         }
     ],
     "current_user": {
         "username": "isaacyee",
-        "password": 5077959367253371379,
+        "password": "af279d1c700abd9701eb18c477f7ef58c1fa3eca3dc50b42a1acd6ac51a5df6a",
         "access_level": 2
     }
 }
