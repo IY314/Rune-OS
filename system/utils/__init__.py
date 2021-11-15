@@ -70,7 +70,7 @@ class Path:
         if path is not None:
             self.path = self.universal_path(path)
 
-    @staticmethod
+    @classmethod
     def universal_path(cls, path):
         return os.path.join(*path.split('/'))
 
